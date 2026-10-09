@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/*
+ * A3RA design tokens.
+ * Palette is derived from the logo: obsidian base, soft-white type,
+ * electric blue as the primary accent, warm gold as the secondary accent.
+ * Accents are reserved for meaningful emphasis, active states and glows.
+ */
+@theme {
+  --color-obsidian: #090b10;
+  --color-surface: #0f1219;
+  --color-surface-2: #151925;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-ink: #f4f5f8;
+  --color-muted: #a1a8b8;
+  --color-faint: #6b7283;
+  --color-blue: #4c8dff;
+  --color-blue-soft: #8fb6ff;
+  --color-gold: #e6b272;
+  --color-gold-soft: #f2d3a8;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-obsidian);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: rgb(76 141 255 / 0.35);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Compact uppercase label used above headings. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Text gradient that echoes the logo's blue-to-gold ring. */
+  .text-aura {
+    background: linear-gradient(100deg, var(--color-blue-soft) 0%, var(--color-ink) 45%, var(--color-gold-soft) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Scroll reveal, driven by components/ui/Reveal.tsx. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.8s var(--ease-out-soft),
+    transform 0.8s var(--ease-out-soft);
+}
+.reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Static "orbit" hero visual. Lightweight CSS stand-in for the planned
+ * 3D scene, and the permanent fallback for mobile / reduced motion / no WebGL.
+ */
+@keyframes orbit-drift {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 2px;
+  background: conic-gradient(
+    from 200deg,
+    rgb(76 141 255 / 0.9),
+    rgb(143 182 255 / 0.2),
+    rgb(230 178 114 / 0.9),
+    rgb(242 211 168 / 0.15),
+    rgb(76 141 255 / 0.9)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  filter: drop-shadow(0 0 18px rgb(76 141 255 / 0.35));
+}
+@media (prefers-reduced-motion: no-preference) {
+  .orbit-spin {
+    animation: orbit-drift 60s linear infinite;
+  }
+  .orbit-spin-reverse {
+    animation: orbit-drift 80s linear infinite reverse;
+  }
+}
