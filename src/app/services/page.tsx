@@ -18,8 +18,9 @@ export default function ServicesPage() {
     <>
       <PageHeader
         eyebrow="Services"
-        title="Find the problem. Build the solution. Make it work."
-        intro="Our work is organised into three pillars. Most clients start in one and move into another as the work progresses — the same team stays with you throughout."
+        title="Three ways we can help."
+        intro="Deciding what to build, building it, or improving what already exists. Most clients start in one pillar and move into another as the work progresses."
+        threads="services"
       />
 
       <nav aria-label="Service pillars" className="border-y border-line">
@@ -55,12 +56,12 @@ export default function ServicesPage() {
             </div>
 
             <div className="space-y-4">
-              <Reveal className="rounded-2xl border border-line bg-surface p-7">
+              <Reveal className="spotlight rounded-2xl border border-line bg-surface p-7">
                 <h3 className="eyebrow">The problem</h3>
                 <p className="mt-4 text-lg leading-relaxed">{service.problem}</p>
               </Reveal>
               <div className="grid gap-4 sm:grid-cols-2">
-                <Reveal className="rounded-2xl border border-line bg-surface p-7">
+                <Reveal className="spotlight rounded-2xl border border-line bg-surface p-7">
                   <h3 className="eyebrow">Typical use cases</h3>
                   <ul className="mt-4 space-y-3 text-muted">
                     {service.useCases.map((item) => (
@@ -71,7 +72,7 @@ export default function ServicesPage() {
                     ))}
                   </ul>
                 </Reveal>
-                <Reveal delay={100} className="rounded-2xl border border-line bg-surface p-7">
+                <Reveal delay={100} className="spotlight rounded-2xl border border-line bg-surface p-7">
                   <h3 className="eyebrow">What we deliver</h3>
                   <ul className="mt-4 space-y-3 text-muted">
                     {service.deliverables.map((item) => (
@@ -83,10 +84,6 @@ export default function ServicesPage() {
                   </ul>
                 </Reveal>
               </div>
-              <Reveal className="rounded-2xl border border-line p-7">
-                <h3 className="eyebrow">How it begins</h3>
-                <p className="mt-4 leading-relaxed text-muted">{service.start}</p>
-              </Reveal>
             </div>
           </Container>
         </section>

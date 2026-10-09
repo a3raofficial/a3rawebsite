@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
+import { HeaderThreads, type ThreadPreset } from "@/components/three/stage/HeaderThreads";
 import { cn } from "@/lib/cn";
 
 export function Container({ className, ...props }: ComponentProps<"div">) {
@@ -42,16 +43,52 @@ export function SectionHeading({ eyebrow, title, intro, as: Tag = "h2", classNam
   );
 }
 
+/** Splits a heading into words that rise in one after another (CSS only). */
+export function RisingWords({ text }: { text: string }) {
+  return text.split(" ").map((word, i) => (
+    <span key={i} className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+      <span className="word-rise inline-block" style={{ animationDelay: `${120 + i * 70}ms` }}>
+        {word}
+        {"\u00a0"}
+      </span>
+    </span>
+  ));
+}
+
+type PageHeaderProps = {
+  eyebrow: string;
+  title: string;
+  intro?: ReactNode;
+  /** Live threads state for this page. */
+  threads?: ThreadPreset;
+};
+
 /** Top-of-page header used by every route except Home. */
-export function PageHeader({ eyebrow, title, intro }: Omit<SectionHeadingProps, "as" | "className">) {
+export function PageHeader({ eyebrow, title, intro, threads }: PageHeaderProps) {
   return (
-    <header className="relative overflow-hidden pt-36 pb-16 sm:pt-44 sm:pb-24">
+    <header className="relative flex min-h-[64svh] items-center overflow-hidden pt-32 pb-16 sm:min-h-[72svh] sm:pt-36 sm:pb-20">
+      {threads && (
+        <HeaderThreads
+          preset={threads}
+          className="absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_at_75%_30%,black_25%,transparent_70%)] lg:inset-y-0 lg:right-0 lg:left-auto lg:w-[58%] lg:opacity-100 lg:[mask-image:linear-gradient(to_right,transparent,black_30%)]"
+        />
+      )}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[48rem] -translate-x-1/2 rounded-full bg-blue/10 blur-3xl"
+        className="pointer-events-none absolute -top-40 left-1/4 h-[28rem] w-[48rem] -translate-x-1/2 rounded-full bg-blue/10 blur-3xl"
       />
       <Container className="relative">
-        <SectionHeading as="h1" eyebrow={eyebrow} title={title} intro={intro} />
+        <div className="max-w-2xl">
+          <p className="eyebrow fade-in">{eyebrow}</p>
+          <h1 className="mt-4 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl">
+            <RisingWords text={title} />
+          </h1>
+          {intro && (
+            <p className="fade-in mt-6 text-lg leading-relaxed text-muted text-pretty" style={{ animationDelay: "500ms" }}>
+              {intro}
+            </p>
+          )}
+        </div>
       </Container>
     </header>
   );

@@ -9,8 +9,6 @@ export type Service = {
   problem: string;
   useCases: string[];
   deliverables: string[];
-  /** How an engagement in this pillar typically begins. */
-  start: string;
 };
 
 export const services: Service[] = [
@@ -35,8 +33,6 @@ export const services: Service[] = [
       "Process and cost optimization recommendations",
       "Technical roadmap and solution architecture",
     ],
-    start:
-      "A discovery conversation about your business, the problem and its constraints, followed by a scoped assessment.",
   },
   {
     id: "engineering",
@@ -59,8 +55,6 @@ export const services: Service[] = [
       "Product prototypes and MVPs",
       "API integrations, backend systems and deployment",
     ],
-    start:
-      "A short requirements session to agree scope, priorities and a realistic first release before design and build begin.",
   },
   {
     id: "optimization",
@@ -83,7 +77,5 @@ export const services: Service[] = [
       "System and process optimization",
       "Ongoing technical support and product evolution",
     ],
-    start:
-      "A review of your current workflows and systems to identify where improvement will have the most impact.",
   },
 ];

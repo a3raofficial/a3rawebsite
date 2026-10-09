@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Calendar, Mail, Phone } from "lucide-react";
 import { ProjectEnquiryForm } from "@/components/forms/ProjectEnquiryForm";
 import { buttonClasses } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Section";
+import { Container, RisingWords } from "@/components/ui/Section";
 import { founders, telHref } from "@/content/founders";
 import { site } from "@/content/site";
 
@@ -27,7 +27,7 @@ export default function ContactPage() {
         <div className="lg:sticky lg:top-32 lg:self-start">
           <p className="eyebrow">Contact</p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-            Tell us what you&apos;re trying to solve.
+            <RisingWords text="Tell us what you're trying to solve." />
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted">
             You don&apos;t need a specification or a clear solution in mind. A few sentences about the problem is
@@ -35,7 +35,7 @@ export default function ContactPage() {
           </p>
 
           <div className="mt-10 space-y-4">
-            <div className="rounded-2xl border border-line bg-surface p-6">
+            <div className="spotlight rounded-2xl border border-line bg-surface p-6">
               <div className="flex items-center gap-3">
                 <Calendar aria-hidden className="size-5 text-blue" />
                 <h2 className="font-semibold">Prefer to talk first?</h2>
@@ -58,7 +58,7 @@ export default function ContactPage() {
               </a>
             )}
 
-            <div className="rounded-2xl border border-line p-6">
+            <div className="spotlight rounded-2xl border border-line p-6">
               <div className="flex items-center gap-3">
                 <Phone aria-hidden className="size-5 text-blue" />
                 <h2 className="font-semibold">Call a founder</h2>
@@ -68,9 +68,7 @@ export default function ContactPage() {
                   .filter((f) => f.phone)
                   .map((f) => (
                     <li key={f.id} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
-                      <span>
-                        {f.name} <span className="text-faint">· {f.role}</span>
-                      </span>
+                      <span>{f.name}</span>
                       <a href={telHref(f.phone!)} className="shrink-0 text-muted hover:text-ink">
                         {f.phone}
                       </a>

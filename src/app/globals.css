@@ -2,19 +2,19 @@
 
 /*
  * A3RA design tokens.
- * Palette is derived from the logo: obsidian base, soft-white type,
+ * Palette is derived from the logo: deep navy base ("obsidian" token), soft-white type,
  * electric blue as the primary accent, warm gold as the secondary accent.
  * Accents are reserved for meaningful emphasis, active states and glows.
  */
 @theme {
-  --color-obsidian: #090b10;
-  --color-surface: #0f1219;
-  --color-surface-2: #151925;
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-obsidian: #0b1430;
+  --color-surface: #111c3e;
+  --color-surface-2: #17244b;
+  --color-line: rgb(255 255 255 / 0.09);
+  --color-line-strong: rgb(255 255 255 / 0.18);
   --color-ink: #f4f5f8;
-  --color-muted: #a1a8b8;
-  --color-faint: #6b7283;
+  --color-muted: #aeb8d4;
+  --color-faint: #7a87ab;
   --color-blue: #4c8dff;
   --color-blue-soft: #8fb6ff;
   --color-gold: #e6b272;
@@ -101,43 +101,76 @@
   }
 }
 
-/*
- * Static "orbit" hero visual. Lightweight CSS stand-in for the planned
- * 3D scene, and the permanent fallback for mobile / reduced motion / no WebGL.
- */
-@keyframes orbit-drift {
+/* Page header entrance: words rise, supporting text fades in. */
+@keyframes word-rise {
   from {
-    transform: rotate(0deg);
+    transform: translateY(105%);
   }
   to {
-    transform: rotate(360deg);
+    transform: none;
   }
 }
-.orbit-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  padding: 2px;
-  background: conic-gradient(
-    from 200deg,
-    rgb(76 141 255 / 0.9),
-    rgb(143 182 255 / 0.2),
-    rgb(230 178 114 / 0.9),
-    rgb(242 211 168 / 0.15),
-    rgb(76 141 255 / 0.9)
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  filter: drop-shadow(0 0 18px rgb(76 141 255 / 0.35));
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .orbit-spin {
-    animation: orbit-drift 60s linear infinite;
+  .word-rise {
+    animation: word-rise 0.9s var(--ease-out-soft) both;
   }
-  .orbit-spin-reverse {
-    animation: orbit-drift 80s linear infinite reverse;
+  .fade-in {
+    animation: fade-in 0.9s var(--ease-out-soft) both;
   }
+}
+
+/* Cursor spotlight on cards; --mx/--my set by components/ui/Spotlight.tsx. */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(76 141 255 / 0.12),
+    rgb(230 178 114 / 0.05) 35%,
+    transparent 60%
+  );
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Route entrance (app/template.tsx). Opacity only: a transform here would
+   break the homepage's position:fixed 3D stage. */
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter {
+    animation: page-fade 0.6s ease-out both;
+  }
+}
+
+/* Homepage stage: deep navy with soft pools of blue and gold light. */
+.stage-backdrop {
+  background:
+    radial-gradient(60% 55% at 72% 42%, rgb(52 92 196 / 0.32), transparent 70%),
+    radial-gradient(40% 40% at 12% 95%, rgb(230 178 114 / 0.1), transparent 70%),
+    radial-gradient(50% 50% at 95% 100%, rgb(76 141 255 / 0.12), transparent 70%),
+    var(--color-obsidian);
 }

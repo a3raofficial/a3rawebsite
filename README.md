@@ -28,13 +28,28 @@ All copy lives in `src/content/`:
 
 Images live in `public/images/`.
 
-## Hero visual
+## Threads (3D) and site motion
 
-- Desktop (≥768px, WebGL, motion allowed): `src/components/three/HeroScene.tsx` — three procedural ribbons in the
-  logo palette, slow drift, limited cursor tilt. Three.js loads only after the page is idle and pauses when the
-  hero is off-screen or the tab is hidden.
-- Everyone else (phones, reduced motion, no WebGL, or if the scene errors): the CSS rings in
-  `src/components/ui/OrbitVisual.tsx`. Three.js is never downloaded in these cases.
+Hundreds of fine luminous threads — the A3RA "thread" story. The same threads blend between four shapes:
+**tangle** (the problem), **three bundles** (strategy gold, data & AI pearl, engineering blue), the
+**A3RA wordmark** woven from fibres (blue 3, like the logo), and one **braided rope** (the work moving forward).
+Light pulses run along them like fibre optics.
+
+- Geometry: `src/components/three/stage/threads.ts` (letter strokes, yarn tangle, bundles, braid).
+  Renderer: `ThreadScene.tsx` (three.js + React Three Fiber; screen-space thread ribbons, additive light).
+- Homepage (`components/home/Story.tsx`): on load the intro **autoplays** (~6 s: tangle → untangled → woven
+  into A3RA) with a step indicator and Replay. Scrolling then carries the threads on: bundles (what we bring),
+  braid (how it moves), back to A3RA (closing). Layouts per section: `DESKTOP` / `PORTRAIT` in `ThreadScene.tsx`.
+- Inner pages: `PageHeader threads="services" | "process" | "projects" | "about"` (bundles, braid, tangle,
+  wordmark) — presets in `HeaderThreads.tsx`.
+- Other motion: rising-word titles, page fade, cursor spotlight on cards, scroll-filled Process timeline.
+- Fallbacks: lighter quality on phones; reduced motion → the finished wordmark, static; no WebGL → logo image
+  on the homepage, nothing in headers. Three.js loads when the browser is idle.
+
+## Content rule
+
+Each idea lives on one page. Other pages link to it rather than repeat it — including closing calls to action,
+which take a page-specific `title`/`body` (no defaults).
 
 ## Enquiries (lead capture)
 

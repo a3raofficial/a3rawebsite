@@ -13,7 +13,7 @@ export async function Footer() {
   const year = await currentYear();
 
   return (
-    <footer className="border-t border-line">
+    <footer className="relative z-10 border-t border-line bg-obsidian">
       <Container className="grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Image
@@ -23,9 +23,6 @@ export async function Footer() {
             height={826}
             className="h-auto w-36 mix-blend-screen"
           />
-          <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted">
-            We find the problem. We build the solution. We make it work.
-          </p>
         </div>
 
         <nav aria-label="Footer">
@@ -61,12 +58,9 @@ export async function Footer() {
       </Container>
       <Container className="flex flex-col gap-2 border-t border-line py-6 text-xs text-faint sm:flex-row sm:justify-between">
         <p>© {year} A3RA</p>
-        <div className="flex gap-6">
-          <Link href="/privacy" className="transition-colors hover:text-ink">
-            Privacy
-          </Link>
-          <p>{site.tagline}</p>
-        </div>
+        <Link href="/privacy" className="transition-colors hover:text-ink">
+          Privacy
+        </Link>
       </Container>
     </footer>
   );

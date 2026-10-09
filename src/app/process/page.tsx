@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Plus } from "lucide-react";
 import { ClosingCta } from "@/components/ui/ClosingCta";
-import { Reveal } from "@/components/ui/Reveal";
+import { ProcessTimeline } from "@/components/ui/ProcessTimeline";
 import { PageHeader, Section, SectionHeading } from "@/components/ui/Section";
 import { faqs, processStages } from "@/content/process";
 
@@ -19,40 +19,11 @@ export default function ProcessPage() {
         eyebrow="Process"
         title="A predictable path from problem to working solution."
         intro="Five stages, agreed one at a time. You always know what we're doing, why, and what comes next."
+        threads="process"
       />
 
       <Section>
-        <ol className="relative">
-          {/* The progress line connecting the stages. */}
-          <span
-            aria-hidden
-            className="absolute top-2 bottom-2 left-[1.15rem] w-px bg-gradient-to-b from-blue via-blue/40 to-gold/60 sm:left-[1.4rem]"
-          />
-          {processStages.map((stage) => (
-            <li key={stage.number} className="relative pb-16 pl-14 last:pb-0 sm:pl-20">
-              <span className="absolute top-0 left-0 flex size-10 items-center justify-center rounded-full border border-line-strong bg-obsidian font-mono text-xs text-blue sm:size-12">
-                {stage.number}
-              </span>
-              <Reveal className="grid gap-6 md:grid-cols-[1fr_1fr] md:gap-12">
-                <div>
-                  <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{stage.title}</h2>
-                  <p className="mt-4 text-lg leading-relaxed text-muted">{stage.description}</p>
-                </div>
-                <div className="rounded-2xl border border-line bg-surface p-6">
-                  <h3 className="eyebrow">What to expect</h3>
-                  <ul className="mt-4 space-y-3 text-muted">
-                    {stage.expect.map((item) => (
-                      <li key={item} className="flex gap-3">
-                        <span aria-hidden className="mt-2.5 size-1 shrink-0 rounded-full bg-blue" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
-            </li>
-          ))}
-        </ol>
+        <ProcessTimeline stages={processStages} />
       </Section>
 
       <Section>
@@ -72,7 +43,11 @@ export default function ProcessPage() {
         </div>
       </Section>
 
-      <ClosingCta />
+      <ClosingCta
+        title="Stage one is a conversation."
+        body="Pick a time that suits you and we'll start with Discover."
+        cta={{ label: "Book a discovery call", href: "/contact/book" }}
+      />
     </>
   );
 }

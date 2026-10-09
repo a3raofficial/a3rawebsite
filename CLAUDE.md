@@ -11,9 +11,12 @@ Goal: convert visitors into project enquiries and discovery calls.
 - `lucide-react` icons, `zod` validation. Keep dependencies minimal; ask before adding any.
 - MongoDB Atlas (`mongodb` driver) for leads; Gmail SMTP via `nodemailer` for email; Vitest for unit tests.
 - Discovery calls are booked on-site (`/contact/book`) into an `appointments` collection; Meet links are sent manually.
-- 3D hero: `three` + `@react-three/fiber` (no drei) in `src/components/three/HeroScene.tsx`, loaded lazily by
-  `src/components/home/HeroVisual.tsx` only on ≥768px screens with WebGL and no reduced-motion; the CSS
-  `OrbitVisual` is the fallback. Keep the canvas `pointer-events: none` and the hero text/buttons outside it.
+- 3D = luminous threads (`components/three/stage/threads.ts` + `ThreadScene.tsx`, three + @react-three/fiber, no drei):
+  one set of threads blends tangle → bundles → A3RA wordmark → braid. Homepage intro autoplays on load
+  (`components/home/Story.tsx`, GSAP), then scroll carries it; inner headers via `PageHeader threads=…`.
+  Palette is deep navy (`--color-obsidian` is #0b1430). Thread quads need `side: DoubleSide` (they share one
+  winding). Per-frame uniforms are module-level (React lint forbids mutating hook values). No bloom pass.
+- Never repeat content across pages: one page owns each idea, others link. `ClosingCta` needs unique title/body.
 - Planned: launch SEO. Domain a3ra.in pending.
 
 ## Layout

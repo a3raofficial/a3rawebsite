@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ClosingCta } from "@/components/ui/ClosingCta";
 import { PageHeader, Section, SectionHeading } from "@/components/ui/Section";
-import { caseStudyStructure, projectCategories, projects } from "@/content/projects";
+import { caseStudyStructure, projects } from "@/content/projects";
 
 export const metadata: Metadata = {
   title: "Selected Projects & Case Studies",
@@ -17,6 +17,7 @@ export default function ProjectsPage() {
         eyebrow="Work"
         title="Real work, described honestly."
         intro="We only publish projects that are real and approved for public display, and we're clear about whether something is client work, in progress, or independent."
+        threads="projects"
       />
 
       {projects.length === 0 && (
@@ -35,18 +36,6 @@ export default function ProjectsPage() {
       )}
 
       <Section>
-        <SectionHeading eyebrow="Focus areas" title="The kinds of work we take on." />
-        <ul className="mt-16 grid gap-4 md:grid-cols-3">
-          {projectCategories.map((category) => (
-            <li key={category.title} className="rounded-2xl border border-line bg-surface p-7">
-              <h3 className="text-xl font-semibold tracking-tight">{category.title}</h3>
-              <p className="mt-3 leading-relaxed text-muted">{category.description}</p>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section>
         <SectionHeading
           eyebrow="How we document work"
           title="Every case study answers the same questions."
@@ -54,7 +43,7 @@ export default function ProjectsPage() {
         />
         <ol className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
           {caseStudyStructure.map((step, i) => (
-            <li key={step.title} className="bg-obsidian p-7">
+            <li key={step.title} className="spotlight bg-obsidian p-7">
               <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="mt-6 text-lg font-semibold">{step.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">{step.description}</p>
@@ -63,7 +52,7 @@ export default function ProjectsPage() {
         </ol>
       </Section>
 
-      <ClosingCta title="Working on something similar?" />
+      <ClosingCta title="Working on something similar?" body="Tell us about it, even if it's still an early idea." />
     </>
   );
 }

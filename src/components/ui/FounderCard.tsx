@@ -11,7 +11,7 @@ type FounderCardProps = {
 
 export function FounderCard({ founder, variant = "compact" }: FounderCardProps) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors hover:border-line-strong">
+    <article className="spotlight group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors hover:border-line-strong">
       {/* Portraits are on white; multiply onto a cool grey so they sit in the dark palette. */}
       <div className="relative aspect-[4/4.4] overflow-hidden bg-[#c9cfdb]">
         <Image

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Clock, Mail, Video } from "lucide-react";
 import { BookingForm } from "@/components/forms/BookingForm";
-import { Container } from "@/components/ui/Section";
+import { Container, RisingWords } from "@/components/ui/Section";
 import { booking } from "@/content/booking";
 
 export const metadata: Metadata = {
@@ -22,7 +22,9 @@ export default function BookPage() {
       <Container className="grid gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-20">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <p className="eyebrow">Discovery call</p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-6xl">Let&apos;s talk it through.</h1>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
+            <RisingWords text="Let's talk it through." />
+          </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted">
             A short conversation to understand your business and the problem. No preparation needed, and no obligation
             to continue.

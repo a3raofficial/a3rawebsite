@@ -26,21 +26,6 @@ export const projectStatusLabel: Record<ProjectStatus, string> = {
   concept: "Conceptual example",
 };
 
-export const projectCategories = [
-  {
-    title: "Digital product development",
-    description: "Websites, web applications and MVPs built from a clear problem definition.",
-  },
-  {
-    title: "AI and data systems",
-    description: "Practical AI features, agents and data workflows where they create real value.",
-  },
-  {
-    title: "Business process optimization",
-    description: "Automation and system improvements that remove recurring manual work.",
-  },
-];
-
 /** The structure every published case study follows. */
 export const caseStudyStructure = [
   { title: "Context", description: "Who the client is, where disclosure is approved." },
