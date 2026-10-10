@@ -6,3 +6,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Load Netlify's Next.js adapter explicitly (without it, .next is served as plain
+# files and every page 404s).
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
