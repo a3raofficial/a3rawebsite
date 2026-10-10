@@ -9,7 +9,13 @@ export function json(body: unknown, status = 200) {
 }
 
 export function clientIp(request: NextRequest) {
-  return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
+  return (
+    // Netlify sets this to the real visitor IP; fall back to standard proxy headers.
+    request.headers.get("x-nf-client-connection-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  );
 }
 
 /**

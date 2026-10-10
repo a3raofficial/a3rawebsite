@@ -1,0 +1,8 @@
+# Netlify builds the site with its Next.js (OpenNext) adapter automatically.
+# Environment variables (secrets) are set in the Netlify UI, never in this file.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"

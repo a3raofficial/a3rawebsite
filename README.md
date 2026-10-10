@@ -136,6 +136,43 @@ up to 14 days out — change these in `src/content/booking.ts`).
 When the a3ra.in domain is live, swap the transport in `src/lib/server/email.ts` for a domain-verified provider
 (SPF/DKIM/DMARC) and update `GMAIL_USER`/`NEXT_PUBLIC_SITE_URL`.
 
+## Deployment (Netlify + a3ra.in on GoDaddy)
+
+Hosting: Netlify (free plan; commercial use allowed). `netlify.toml` sets the build; Netlify's Next.js adapter
+is applied automatically. Verified locally with `npx netlify-cli build --offline` and `netlify serve --offline`.
+
+1. **Push to GitHub**, then in Netlify: *Add new project → Import from Git →* pick the repo. Build settings come
+   from `netlify.toml`.
+2. **Environment variables** (Site configuration → Environment variables), set *before* the first deploy:
+
+   | Variable | Value |
+   | --- | --- |
+   | `NEXT_PUBLIC_SITE_URL` | `https://www.a3ra.in` (used at build time for canonical URLs, sitemap, link previews) |
+   | `MONGODB_URI` | Atlas connection string |
+   | `MONGODB_DB` | `a3ra` (production — not `a3ra_dev`) |
+   | `GMAIL_USER` | `a3ra.official@gmail.com` |
+   | `GMAIL_APP_PASSWORD` | Gmail app password |
+   | `LEAD_NOTIFICATION_RECIPIENTS` | comma-separated inboxes |
+   | `RATE_LIMIT_SALT` | a new random value: `openssl rand -hex 24` |
+
+3. **MongoDB Atlas → Network Access** must allow `0.0.0.0/0` (Netlify functions have no fixed IPs).
+4. **Deploy**, then test on the `*.netlify.app` URL: every page, one enquiry and one booking (check the emails and
+   the `a3ra` database; delete the test records afterwards).
+5. **Domain**: Netlify → *Domain management → Add a domain* → `a3ra.in`; make **www.a3ra.in** primary (Netlify's
+   recommendation with external DNS; `a3ra.in` redirects to it).
+6. **GoDaddy DNS** (*My Products → a3ra.in → DNS*): turn off the GoDaddy "Coming Soon" site / forwarding, delete the
+   existing `@` A record(s) and `www` CNAME, then add:
+
+   | Type | Name | Value |
+   | --- | --- | --- |
+   | A | `@` | `75.2.60.5` |
+   | CNAME | `www` | `<your-site>.netlify.app` |
+
+7. Wait for DNS (minutes to ~24 h). Netlify issues the HTTPS certificate automatically once DNS resolves.
+8. Submit `https://www.a3ra.in/sitemap.xml` in Google Search Console.
+
+Rollback: Netlify → *Deploys* → pick an earlier deploy → *Publish deploy*.
+
 ## Checks
 
 ```bash

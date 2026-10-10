@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Spotlight } from "@/components/effects/Spotlight";
 import { ThreadCursor } from "@/components/effects/ThreadCursor";
 import { LogoTransition } from "@/components/effects/LogoTransition";
+import { founders } from "@/content/founders";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -27,10 +28,27 @@ export const metadata: Metadata = {
   description: site.description,
   openGraph: {
     type: "website",
+    url: "/",
     siteName: site.name,
     title: "A3RA | AI, Software & Business Optimization",
     description: site.description,
   },
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.url,
+  logo: `${site.url}/icon.png`,
+  slogan: site.tagline,
+  description: site.description,
+  ...(site.contactEmail && { email: site.contactEmail }),
+  founder: founders.map((f) => ({
+    "@type": "Person",
+    name: f.name,
+    ...(f.linkedinUrl && { sameAs: f.linkedinUrl }),
+  })),
 };
 
 export const viewport: Viewport = {
@@ -48,6 +66,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
+        <script
+          type="application/ld+json"
+          // Only facts that are true today: name, site, logo, contact email, founders.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <Navbar />
         <main id="main" className="flex-1">
           {children}
