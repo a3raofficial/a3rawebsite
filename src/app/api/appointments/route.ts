@@ -1,9 +1,9 @@
 import { ObjectId } from "mongodb";
 import { after, type NextRequest } from "next/server";
 import { submitAppointment, type AppointmentDeps } from "@/lib/appointments";
-import { sendAppointmentClientConfirmation, sendAppointmentTeamNotification } from "@/lib/email";
-import { clientIp, hashIp, json, readJsonBody } from "@/lib/http";
-import { getAppointmentsCollection } from "@/lib/mongodb";
+import { sendAppointmentClientConfirmation, sendAppointmentTeamNotification } from "@/lib/server/email";
+import { clientIp, hashIp, json, readJsonBody } from "@/lib/server/http";
+import { getAppointmentsCollection } from "@/lib/server/mongodb";
 
 const deps: AppointmentDeps = {
   async countRecentByIp(ipHash, since) {

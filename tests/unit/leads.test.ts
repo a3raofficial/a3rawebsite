@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { hashIp } from "@/lib/http";
+import { hashIp } from "@/lib/server/http";
 import { RATE_LIMIT_MAX, submitEnquiry, type LeadDeps } from "@/lib/leads";
 import type { Lead } from "@/types/lead";
 

@@ -2,16 +2,16 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import type { ThreadFrame } from "@/components/three/stage/ThreadScene";
+import type { ThreadFrame } from "@/components/three/ThreadScene";
 import {
   SceneBoundary,
   useMediaQuery,
   usePointerTracking,
   useStageCapabilities,
-} from "@/components/three/stage/stage-utils";
+} from "@/components/three/stage-utils";
 import { cn } from "@/lib/cn";
 
-const ThreadScene = dynamic(() => import("@/components/three/stage/ThreadScene"), { ssr: false });
+const ThreadScene = dynamic(() => import("@/components/three/ThreadScene"), { ssr: false });
 
 const none = { tangle: 0, bundles: 0, word: 0, braid: 0 };
 const centred = { x: 0, y: 0, scale: 0.55, rx: 0, ry: -0.15 };

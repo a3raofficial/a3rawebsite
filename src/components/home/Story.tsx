@@ -7,8 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, ArrowUpRight, RotateCcw } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Section";
-import { StoryCanvas } from "@/components/three/stage/StoryCanvas";
-import { setStoryActive, storyState } from "@/components/three/stage/story-state";
+import { StoryCanvas } from "@/components/three/StoryCanvas";
+import { setStoryActive, storyState } from "@/components/three/story-state";
 import { approachSection, closing, disciplines, disciplinesSection, hero, introSteps } from "@/content/home";
 
 const TANGLE = { tangle: 1, bundles: 0, word: 0, braid: 0 };
@@ -32,12 +32,16 @@ export function Story() {
     intro.current?.kill();
     Object.assign(storyState.intro, TANGLE);
     setStep(0);
+    root.current?.removeAttribute("data-intro-done");
     intro.current = gsap
       .timeline({ delay: 0.5 })
       .to(storyState.intro, { tangle: 0, bundles: 1, duration: 2, ease: "power2.inOut" }, 1)
       .call(() => setStep(1), [], 1)
       .to(storyState.intro, { bundles: 0, word: 1, duration: 2.4, ease: "power3.inOut" }, 4)
-      .call(() => setStep(2), [], 4);
+      .call(() => setStep(2), [], 4)
+      // The moment A3RA is woven: an energy discharge from the wordmark.
+      .call(() => (storyState.surge = performance.now()), [], 5.9)
+      .call(() => root.current?.setAttribute("data-intro-done", ""), [], 6.6);
   }, [setStep]);
 
   useEffect(() => {
@@ -105,7 +109,7 @@ export function Story() {
   return (
     <>
       <StoryCanvas />
-      <div ref={root} className="relative z-10">
+      <div ref={root} className="group/story relative z-10">
         {/* Hero — the intro plays here on load */}
         <section data-hero-section className="relative flex min-h-svh items-end pb-16 sm:items-center sm:pb-0">
           <Container>
@@ -145,6 +149,9 @@ export function Story() {
                   Replay
                 </button>
               </div>
+              <p className="mt-5 hidden text-xs text-faint opacity-0 transition-opacity duration-1000 group-data-[intro-done]/story:opacity-100 lg:block">
+                Psst — there&apos;s a loose thread on the A. Pull it.
+              </p>
             </div>
           </Container>
         </section>
@@ -163,7 +170,14 @@ export function Story() {
                 <ul className="mt-10 space-y-5">
                   {disciplines.map((d, i) => (
                     <li key={d.name} data-beat-line>
-                      <Link href={d.href} className="group flex items-baseline gap-4">
+                      <Link
+                        href={d.href}
+                        className="group flex items-baseline gap-4"
+                        onPointerEnter={() => (storyState.focus = i)}
+                        onPointerLeave={() => (storyState.focus = -1)}
+                        onFocus={() => (storyState.focus = i)}
+                        onBlur={() => (storyState.focus = -1)}
+                      >
                         <span className={`font-mono text-xs ${d.colour}`}>0{i + 1}</span>
                         <span className={`text-2xl font-medium tracking-tight sm:text-3xl ${d.colour}`}>{d.name}</span>
                         <span className="text-muted transition-colors group-hover:text-ink">{d.line}</span>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { enquirySchema, type Enquiry } from "@/lib/validation";
-import type { EmailResult } from "@/lib/email";
+import type { EmailResult } from "@/lib/server/email";
 import type { Lead } from "@/types/lead";
 
 /** Enquiries allowed per IP within the rate-limit window. */

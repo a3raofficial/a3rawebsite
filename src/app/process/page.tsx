@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Plus } from "lucide-react";
 import { ClosingCta } from "@/components/ui/ClosingCta";
-import { ProcessTimeline } from "@/components/ui/ProcessTimeline";
+import { ProcessTimeline } from "@/components/process/ProcessTimeline";
 import { PageHeader, Section, SectionHeading } from "@/components/ui/Section";
 import { faqs, processStages } from "@/content/process";
 

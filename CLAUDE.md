@@ -11,24 +11,34 @@ Goal: convert visitors into project enquiries and discovery calls.
 - `lucide-react` icons, `zod` validation. Keep dependencies minimal; ask before adding any.
 - MongoDB Atlas (`mongodb` driver) for leads; Gmail SMTP via `nodemailer` for email; Vitest for unit tests.
 - Discovery calls are booked on-site (`/contact/book`) into an `appointments` collection; Meet links are sent manually.
-- 3D = luminous threads (`components/three/stage/threads.ts` + `ThreadScene.tsx`, three + @react-three/fiber, no drei):
+- 3D = luminous threads (`components/three/threads.ts` + `ThreadScene.tsx`, three + @react-three/fiber, no drei):
   one set of threads blends tangle → bundles → A3RA wordmark → braid. Homepage intro autoplays on load
   (`components/home/Story.tsx`, GSAP), then scroll carries it; inner headers via `PageHeader threads=…`.
-  Palette is deep navy (`--color-obsidian` is #0b1430). Thread quads need `side: DoubleSide` (they share one
+  Palette is near-black (`--color-obsidian` #090b10) — user preferred black over navy.
+  The woven 3 must match the logo's 3 (flat top bar, diagonal, one big bowl sweeping back up on the left).
+  Page transitions: `components/effects/LogoTransition.tsx` (black screen + gliding logo). Sewn/stitched headings were
+  tried and rejected as messy — don't reintroduce them. Thread quads need `side: DoubleSide` (they share one
   winding). Per-frame uniforms are module-level (React lint forbids mutating hook values). No bloom pass.
 - Never repeat content across pages: one page owns each idea, others link. `ClosingCta` needs unique title/body.
 - Planned: launch SEO. Domain a3ra.in pending.
 
 ## Layout
-- `src/app/*` — routes: `/`, `/services`, `/projects`, `/about`, `/process`, `/contact`.
-- `src/content/*` — all editable marketing copy (services, process + FAQ, founders, projects, site config).
+- `src/app/*` — routes (`/`, `/services`, `/projects`, `/about`, `/process`, `/contact`, `/contact/book`, `/privacy`)
+  and API route handlers (`src/app/api/*/route.ts`, HTTP concerns only).
+- `src/content/*` — all editable copy and settings (site, home, services, process + FAQ, founders, projects, booking).
   Change copy here, not in page files.
-- `src/components/ui` — shared primitives (Button, Section/PageHeader, Reveal, cards, ClosingCta, OrbitVisual).
-- `src/components/layout` — Navbar, Footer, Logo. `src/components/home` — homepage-only sections.
-- `src/lib/validation.ts` — enquiry Zod schema, shared by the form and the server endpoint.
-- `src/app/api/leads/route.ts` — enquiry endpoint (HTTP concerns only); `src/lib/leads.ts` — the flow, with injected deps for tests;
-  `src/lib/appointments.ts` + `src/lib/slots.ts` — booking flow and slot grid (config in `src/content/booking.ts`);
-  `src/lib/http.ts` — shared request parsing; `src/lib/mongodb.ts`, `src/lib/email.ts` — server-only integrations. No MVC layers; one app, no FE/BE split.
+- `src/components/`
+  - `layout/` — Navbar, Footer, Logo.
+  - `ui/` — reusable primitives (Button, Section/PageHeader, Reveal, cards, ClosingCta).
+  - `forms/` — enquiry and booking forms.
+  - `home/` — homepage story. `process/` — Process page timeline.
+  - `effects/` — site-wide effects mounted in the root layout (LogoTransition, ThreadCursor, Spotlight).
+  - `three/` — the thread scene (geometry, renderer, homepage stage, header threads, shared state/hooks).
+- `src/lib/` — framework-free logic shared by server and client (validation, leads/appointments flows with injected
+  deps, slots, cn). `src/lib/server/` — server-only code (`http.ts` request parsing, `mongodb.ts`, `email.ts`);
+  never import it from client components.
+- `src/types/` — data shapes (Lead, Appointment). `tests/unit/` — Vitest. `public/images/` — brand and founder images.
+- No MVC layers; one app, no FE/BE split.
 
 ## Rules
 - Never invent clients, testimonials, metrics, credentials, addresses or company history.

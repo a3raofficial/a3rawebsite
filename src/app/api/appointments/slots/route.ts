@@ -1,8 +1,8 @@
 import { connection } from "next/server";
 import { booking } from "@/content/booking";
 import { availableSlots } from "@/lib/appointments";
-import { json } from "@/lib/http";
-import { getAppointmentsCollection } from "@/lib/mongodb";
+import { json } from "@/lib/server/http";
+import { getAppointmentsCollection } from "@/lib/server/mongodb";
 import { ACTIVE_APPOINTMENT_STATUSES } from "@/types/appointment";
 
 /** Open discovery-call slots. Exposes only times, never who booked them. */

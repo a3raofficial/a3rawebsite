@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { booking } from "@/content/booking";
-import type { EmailResult } from "@/lib/email";
+import type { EmailResult } from "@/lib/server/email";
 import { formatSlot, generateSlots, isBookableSlot } from "@/lib/slots";
 import { appointmentSchema } from "@/lib/validation";
 import type { Appointment } from "@/types/appointment";

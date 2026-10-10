@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
-import { Spotlight } from "@/components/ui/Spotlight";
+import { Spotlight } from "@/components/effects/Spotlight";
+import { ThreadCursor } from "@/components/effects/ThreadCursor";
+import { LogoTransition } from "@/components/effects/LogoTransition";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -32,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b1430",
+  themeColor: "#090b10",
   colorScheme: "dark",
 };
 
@@ -52,6 +54,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <Spotlight />
+        <ThreadCursor />
+        <LogoTransition />
       </body>
     </html>
   );

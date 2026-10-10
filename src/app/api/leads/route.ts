@@ -1,9 +1,9 @@
 import { ObjectId } from "mongodb";
 import { after, type NextRequest } from "next/server";
-import { sendClientConfirmation, sendTeamNotification } from "@/lib/email";
-import { clientIp, hashIp, json, readJsonBody } from "@/lib/http";
+import { sendClientConfirmation, sendTeamNotification } from "@/lib/server/email";
+import { clientIp, hashIp, json, readJsonBody } from "@/lib/server/http";
 import { submitEnquiry, type LeadDeps } from "@/lib/leads";
-import { getLeadsCollection } from "@/lib/mongodb";
+import { getLeadsCollection } from "@/lib/server/mongodb";
 
 const deps: LeadDeps = {
   async countRecentByIp(ipHash, since) {

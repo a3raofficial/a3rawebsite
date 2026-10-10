@@ -35,14 +35,19 @@ Hundreds of fine luminous threads — the A3RA "thread" story. The same threads 
 **A3RA wordmark** woven from fibres (blue 3, like the logo), and one **braided rope** (the work moving forward).
 Light pulses run along them like fibre optics.
 
-- Geometry: `src/components/three/stage/threads.ts` (letter strokes, yarn tangle, bundles, braid).
+- Geometry: `src/components/three/threads.ts` (letter strokes, yarn tangle, bundles, braid).
   Renderer: `ThreadScene.tsx` (three.js + React Three Fiber; screen-space thread ribbons, additive light).
 - Homepage (`components/home/Story.tsx`): on load the intro **autoplays** (~6 s: tangle → untangled → woven
   into A3RA) with a step indicator and Replay. Scrolling then carries the threads on: bundles (what we bring),
   braid (how it moves), back to A3RA (closing). Layouts per section: `DESKTOP` / `PORTRAIT` in `ThreadScene.tsx`.
 - Inner pages: `PageHeader threads="services" | "process" | "projects" | "about"` (bundles, braid, tangle,
   wordmark) — presets in `HeaderThreads.tsx`.
-- Other motion: rising-word titles, page fade, cursor spotlight on cards, scroll-filled Process timeline.
+- Interactive: the cursor combs the threads; a click sends a ring of light through them; hovering a discipline
+  lights its bundle; a loose thread hangs from the last A — drag it to unravel the wordmark, release to re-weave
+  (desktop only).
+- Other motion: rising-word titles, a thread trail behind the cursor (`components/effects/ThreadCursor.tsx`), cursor spotlight on
+  cards, scroll-filled Process timeline, and page transitions where the screen fades to black and the glowing logo
+  glides across (`components/effects/LogoTransition.tsx`, ~2.6 s; the route swaps while the screen is black).
 - Fallbacks: lighter quality on phones; reduced motion → the finished wordmark, static; no WebGL → logo image
   on the homepage, nothing in headers. Three.js loads when the browser is idle.
 
@@ -128,7 +133,7 @@ up to 14 days out — change these in `src/content/booking.ts`).
 2. Create an App Password and set `GMAIL_APP_PASSWORD`.
 3. Without it, leads are still saved and marked `skipped`.
 
-When the a3ra.in domain is live, swap the transport in `src/lib/email.ts` for a domain-verified provider
+When the a3ra.in domain is live, swap the transport in `src/lib/server/email.ts` for a domain-verified provider
 (SPF/DKIM/DMARC) and update `GMAIL_USER`/`NEXT_PUBLIC_SITE_URL`.
 
 ## Checks

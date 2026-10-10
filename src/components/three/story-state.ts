@@ -16,6 +16,14 @@ export const storyState = {
   pointer: { x: 0, y: 0 },
   /** True while the story is on screen; the scene stops rendering otherwise. */
   active: true,
+  /** Bundle to highlight (0 strategy, 1 data & AI, 2 engineering), or -1. */
+  focus: -1,
+  /** Last click, for the light shockwave (ndc + timestamp in ms; at < 0 = none). */
+  shock: { x: 0, y: 0, at: -1 },
+  /** The loose thread: hovered (cursor near its end) and being dragged. */
+  grab: { hover: false, dragging: false },
+  /** Energy discharge from the wordmark (timestamp in ms; < 0 = none). */
+  surge: -1,
 };
 
 const listeners = new Set<() => void>();

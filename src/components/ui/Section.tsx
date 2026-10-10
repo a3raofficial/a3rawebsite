@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
-import { HeaderThreads, type ThreadPreset } from "@/components/three/stage/HeaderThreads";
+import { HeaderThreads, type ThreadPreset } from "@/components/three/HeaderThreads";
 import { cn } from "@/lib/cn";
 
 export function Container({ className, ...props }: ComponentProps<"div">) {

@@ -9,7 +9,7 @@ const base =
   "group inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-ink text-obsidian hover:bg-white",
+  primary: "energy bg-ink text-obsidian hover:bg-white",
   secondary: "border border-line-strong text-ink hover:border-blue/60 hover:bg-white/[0.04]",
   ghost: "text-muted hover:text-ink",
 };

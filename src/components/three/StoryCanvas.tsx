@@ -2,18 +2,18 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { LogoFallback } from "@/components/three/stage/LogoFallback";
+import { LogoFallback } from "@/components/three/LogoFallback";
 import {
   SceneBoundary,
   useMediaQuery,
   usePointerTracking,
   useStageCapabilities,
-} from "@/components/three/stage/stage-utils";
-import { storyState, subscribeStoryActive } from "@/components/three/stage/story-state";
+} from "@/components/three/stage-utils";
+import { storyState, subscribeStoryActive } from "@/components/three/story-state";
 import { cn } from "@/lib/cn";
 
 // Three.js is downloaded only when the scene is actually shown.
-const ThreadScene = dynamic(() => import("@/components/three/stage/ThreadScene"), { ssr: false });
+const ThreadScene = dynamic(() => import("@/components/three/ThreadScene"), { ssr: false });
 
 /**
  * Full-viewport stage fixed behind the homepage. The still logo paints first;

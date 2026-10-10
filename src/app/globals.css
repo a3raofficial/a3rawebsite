@@ -2,19 +2,19 @@
 
 /*
  * A3RA design tokens.
- * Palette is derived from the logo: deep navy base ("obsidian" token), soft-white type,
+ * Palette is derived from the logo: obsidian base, soft-white type,
  * electric blue as the primary accent, warm gold as the secondary accent.
  * Accents are reserved for meaningful emphasis, active states and glows.
  */
 @theme {
-  --color-obsidian: #0b1430;
-  --color-surface: #111c3e;
-  --color-surface-2: #17244b;
-  --color-line: rgb(255 255 255 / 0.09);
-  --color-line-strong: rgb(255 255 255 / 0.18);
+  --color-obsidian: #090b10;
+  --color-surface: #0f1219;
+  --color-surface-2: #151925;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
   --color-ink: #f4f5f8;
-  --color-muted: #aeb8d4;
-  --color-faint: #7a87ab;
+  --color-muted: #a1a8b8;
+  --color-faint: #6b7283;
   --color-blue: #4c8dff;
   --color-blue-soft: #8fb6ff;
   --color-gold: #e6b272;
@@ -129,7 +129,7 @@
   }
 }
 
-/* Cursor spotlight on cards; --mx/--my set by components/ui/Spotlight.tsx. */
+/* Cursor spotlight on cards; --mx/--my set by components/effects/Spotlight.tsx. */
 .spotlight {
   position: relative;
   isolation: isolate;
@@ -166,11 +166,78 @@
   }
 }
 
-/* Homepage stage: deep navy with soft pools of blue and gold light. */
+/* Homepage stage: black, with a faint glow of blue and gold behind the threads. */
 .stage-backdrop {
   background:
-    radial-gradient(60% 55% at 72% 42%, rgb(52 92 196 / 0.32), transparent 70%),
-    radial-gradient(40% 40% at 12% 95%, rgb(230 178 114 / 0.1), transparent 70%),
-    radial-gradient(50% 50% at 95% 100%, rgb(76 141 255 / 0.12), transparent 70%),
+    radial-gradient(50% 50% at 72% 42%, rgb(52 92 196 / 0.12), transparent 70%),
+    radial-gradient(35% 35% at 90% 95%, rgb(230 178 114 / 0.05), transparent 70%),
     var(--color-obsidian);
+}
+
+/* Cursor states for pulling the loose thread (set by the 3D stage). */
+html[data-cursor="grab"],
+html[data-cursor="grab"] * {
+  cursor: grab !important;
+}
+html[data-cursor="grabbing"],
+html[data-cursor="grabbing"] * {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+/* Effects may draw past the edges; never scroll sideways. */
+body {
+  overflow-x: clip;
+}
+
+/* Primary buttons: a spinning ring of blue-gold energy on hover. */
+@property --energy-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes energy-spin {
+  to {
+    --energy-angle: 360deg;
+  }
+}
+.energy {
+  position: relative;
+  isolation: isolate;
+}
+.energy::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--energy-angle),
+    #4f8dff,
+    transparent 25%,
+    #ffc27a 50%,
+    transparent 75%,
+    #4f8dff
+  );
+  filter: blur(7px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.energy:hover::before,
+.energy:focus-visible::before {
+  opacity: 0.95;
+}
+/* Re-paint the button face above the glow, so the glow only rings the outside. */
+.energy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .energy::before {
+    animation: energy-spin 2.4s linear infinite;
+  }
 }

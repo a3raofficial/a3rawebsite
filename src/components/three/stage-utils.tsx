@@ -1,8 +1,8 @@
 "use client";
 
 import { Component, useEffect, useSyncExternalStore, type ReactNode } from "react";
-import { detectQuality, type Quality } from "@/components/three/stage/quality";
-import { storyState } from "@/components/three/stage/story-state";
+import { detectQuality, type Quality } from "@/components/three/quality";
+import { storyState } from "@/components/three/story-state";
 
 /** Matches a media query; false on the server so SSR renders the fallback. */
 export function useMediaQuery(query: string) {
@@ -54,14 +54,40 @@ export class SceneBoundary extends Component<{ onError: () => void; children: Re
   }
 }
 
-/** Tracks the pointer (normalised -1..1) into the shared stage state. */
+/**
+ * Tracks the pointer into the shared stage state: position (normalised -1..1),
+ * clicks (light shockwave) and grabbing the loose thread.
+ */
 export function usePointerTracking() {
   useEffect(() => {
-    const onMove = (e: PointerEvent) => {
+    const toNdc = (e: PointerEvent) => {
       storyState.pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
       storyState.pointer.y = -((e.clientY / window.innerHeight) * 2 - 1);
     };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
+    const onDown = (e: PointerEvent) => {
+      toNdc(e);
+      if (storyState.grab.hover && e.pointerType === "mouse") {
+        storyState.grab.dragging = true;
+        document.documentElement.dataset.cursor = "grabbing";
+        e.preventDefault(); // no text selection while pulling
+        return;
+      }
+      storyState.shock = { x: storyState.pointer.x, y: storyState.pointer.y, at: performance.now() };
+    };
+    const onUp = () => {
+      if (!storyState.grab.dragging) return;
+      storyState.grab.dragging = false;
+      document.documentElement.dataset.cursor = storyState.grab.hover ? "grab" : "";
+    };
+    window.addEventListener("pointermove", toNdc, { passive: true });
+    window.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", toNdc);
+      window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
   }, []);
 }

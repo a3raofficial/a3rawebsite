@@ -2,12 +2,12 @@ import { NextRequest } from "next/server";
 import { describe, expect, it, vi } from "vitest";
 
 // The route must reject these requests before touching the database or email.
-vi.mock("@/lib/mongodb", () => ({
+vi.mock("@/lib/server/mongodb", () => ({
   getLeadsCollection: vi.fn(() => {
     throw new Error("database should not be called");
   }),
 }));
-vi.mock("@/lib/email", () => ({ sendTeamNotification: vi.fn(), sendClientConfirmation: vi.fn() }));
+vi.mock("@/lib/server/email", () => ({ sendTeamNotification: vi.fn(), sendClientConfirmation: vi.fn() }));
 
 const { POST } = await import("@/app/api/leads/route");
 
