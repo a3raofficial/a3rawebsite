@@ -26,14 +26,37 @@ export const projectStatusLabel: Record<ProjectStatus, string> = {
   concept: "Conceptual example",
 };
 
-/** The structure every published case study follows. */
+/** The structure every published case study follows (a framework, not a list of projects). */
 export const caseStudyStructure = [
-  { title: "Context", description: "Who the client is, where disclosure is approved." },
-  { title: "Problem", description: "What needed to improve or be built." },
-  { title: "Diagnosis", description: "How we approached and understood the problem." },
-  { title: "Solution", description: "What was designed and implemented." },
-  { title: "Technology", description: "The tools used, where relevant." },
-  { title: "Outcome", description: "Verified results, or a transparent account of what was delivered." },
+  {
+    title: "Client & Context",
+    description:
+      "Who the business serves, its operating environment, and the context behind the engagement. Share the client name only when disclosure is approved.",
+  },
+  {
+    title: "Business Challenge",
+    description: "The problem, who it affected, why it mattered, and what needed to change.",
+  },
+  {
+    title: "Diagnosis & Approach",
+    description:
+      "How we investigated the problem, evaluated possible approaches, and identified the right priorities.",
+  },
+  {
+    title: "Solution Delivered",
+    description:
+      "What we designed, developed, automated, or integrated—and how it addressed the original challenge.",
+  },
+  {
+    title: "Technology & Integration",
+    description:
+      "The relevant tools, architecture, data sources, and integrations, explained in the context of the business need.",
+  },
+  {
+    title: "Results & Outcomes",
+    description:
+      "The impact of the work, supported by verified metrics, documented observations, or a transparent account of what was delivered.",
+  },
 ];
 
 export const projects: Project[] = [];

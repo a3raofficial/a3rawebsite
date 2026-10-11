@@ -58,14 +58,13 @@ export function sendTeamNotification(lead: Enquiry, leadId: string): Promise<Ema
     ["Name", lead.name],
     ["Email", lead.email],
     ["Company", lead.company],
-    ["Interest", lead.serviceInterest],
-    ["Budget", lead.budgetRange],
+    ["Wants to improve", lead.serviceInterest],
     ["Timeline", lead.timeline],
   ];
   const text = [
     ...rows.filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`),
     "",
-    lead.problemDescription,
+    lead.problemDescription ?? "(No description given.)",
     "",
     `Lead ID: ${leadId}`,
   ].join("\n");
@@ -77,7 +76,7 @@ export function sendTeamNotification(lead: Enquiry, leadId: string): Promise<Ema
         .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#666">${k}</td><td>${escapeHtml(v!)}</td></tr>`)
         .join("")}
     </table>
-    <p style="font-family:sans-serif;white-space:pre-wrap">${escapeHtml(lead.problemDescription)}</p>
+    <p style="font-family:sans-serif;white-space:pre-wrap">${escapeHtml(lead.problemDescription ?? "(No description given.)")}</p>
     <p style="font-family:sans-serif;color:#888;font-size:12px">Lead ID: ${leadId}</p>`;
 
   return send({

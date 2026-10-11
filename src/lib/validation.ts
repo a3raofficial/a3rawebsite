@@ -4,23 +4,24 @@ import { z } from "zod";
  * Enquiry form schema. Shared by the browser form and, in the backend
  * phase, the server endpoint — the server must re-validate every request.
  */
+/** "What would you like to improve?" — labels are stored as-is with the lead. */
 export const serviceInterests = [
-  "AI strategy",
-  "Custom software",
-  "Business optimization",
-  "Product development",
-  "Not sure yet",
+  "Automate a repetitive business process",
+  "Improve reporting or business intelligence",
+  "Explore AI or machine learning",
+  "Build a website, application, or internal tool",
+  "Connect existing systems or improve a workflow",
+  "Improve an existing product",
+  "Not sure yet — need help defining the problem",
 ] as const;
 
-export const budgetRanges = [
-  "Under ₹1 lakh",
-  "₹1–5 lakh",
-  "₹5–15 lakh",
-  "Above ₹15 lakh",
-  "Not sure yet",
+export const timelines = [
+  "As soon as possible",
+  "Within one month",
+  "Within three months",
+  "Later this year",
+  "Just exploring options",
 ] as const;
-
-export const timelines = ["As soon as possible", "Within 1–3 months", "3–6 months", "Just exploring"] as const;
 
 // Single-line fields must not contain line breaks or other control characters.
 const noControlChars = /^[^\u0000-\u001f\u007f]*$/;
@@ -43,13 +44,14 @@ export const enquirySchema = z.object({
     .regex(noControlChars, "Please remove any line breaks."),
   email: z.email("Please enter a valid email address.").max(200),
   company: optionalText(200),
-  serviceInterest: z.enum(serviceInterests, { error: "Please choose an area of interest." }),
+  serviceInterest: z.enum(serviceInterests, { error: "Please choose what you'd like to improve." }),
+  // Optional: visitors may not be able to describe the problem yet.
   problemDescription: z
     .string()
     .trim()
-    .min(20, "Please tell us a little more — at least a sentence or two.")
-    .max(3000, "Please keep this under 3,000 characters."),
-  budgetRange: z.enum(budgetRanges).optional(),
+    .max(3000, "Please keep this under 3,000 characters.")
+    .optional()
+    .transform((v) => (v ? v : undefined)),
   timeline: z.enum(timelines).optional(),
   privacyConsent: z.literal(true, { error: "Please confirm you agree to us storing your details." }),
 });

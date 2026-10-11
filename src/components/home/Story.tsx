@@ -10,8 +10,16 @@ import { Container } from "@/components/ui/Section";
 import { StoryCanvas } from "@/components/three/StoryCanvas";
 import { setStoryActive, storyState } from "@/components/three/story-state";
 import { approachSection, closing, disciplines, disciplinesSection, hero, introSteps } from "@/content/home";
+import { booking } from "@/content/booking";
+import { site } from "@/content/site";
+import { EnquiryDialog } from "@/components/forms/EnquiryDialog";
+import { cn } from "@/lib/cn";
 
 const TANGLE = { tangle: 1, bundles: 0, word: 0, braid: 0 };
+
+/** Discipline accents match the thread bundles: gold, white, blue. */
+const accentText = { gold: "text-gold", ink: "text-ink", blue: "text-blue" } as const;
+const accentBorder = { gold: "border-gold/50", ink: "border-ink/50", blue: "border-blue/60" } as const;
 
 /**
  * The homepage. On load the threads tell the whole story by themselves
@@ -111,7 +119,7 @@ export function Story() {
       <StoryCanvas />
       <div ref={root} className="group/story relative z-10">
         {/* Hero — the intro plays here on load */}
-        <section data-hero-section className="relative flex min-h-svh items-end pb-16 sm:items-center sm:pb-0">
+        <section data-hero-section className="relative flex min-h-svh items-end pb-16 landscape:items-center landscape:pb-0">
           <Container>
             <div data-hero className="max-w-2xl">
               <p className="eyebrow">{hero.eyebrow}</p>
@@ -156,56 +164,104 @@ export function Story() {
           </Container>
         </section>
 
-        {/* 01 — the threads unravel into three bundles */}
-        <section data-beat className="relative h-[120svh]">
-          <div className="sticky top-0 flex h-svh items-end pb-20 sm:items-center sm:pb-0">
-            <Container>
-              <div className="max-w-xl">
+        {/* 01 — What we bring: the threads unravel into three bundles */}
+        <section data-beat className="relative h-[140svh]">
+          <div className="sticky top-0 flex h-svh items-end pb-14 landscape:items-center landscape:pb-0">
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-obsidian via-obsidian/80 to-transparent landscape:hidden" />
+            <Container className="relative">
+              <div className="grid gap-x-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+                <div>
                 <p data-beat-line className="eyebrow text-blue-soft">
                   {disciplinesSection.eyebrow}
                 </p>
-                <h2 data-beat-line className="mt-5 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl">
+                <h2 data-beat-line className="mt-4 text-3xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl">
                   {disciplinesSection.title}
                 </h2>
-                <ul className="mt-10 space-y-5">
+                <p data-beat-line className="mt-5 hidden max-w-xl leading-relaxed text-muted sm:block">
+                  {disciplinesSection.body}
+                </p>
+                </div>
+                <ul className="mt-6 space-y-1 sm:mt-8 lg:mt-2">
                   {disciplines.map((d, i) => (
                     <li key={d.name} data-beat-line>
                       <Link
                         href={d.href}
-                        className="group flex items-baseline gap-4"
+                        className={cn(
+                          "group -mx-3 block rounded-xl border-l-2 px-3 py-2.5 transition-colors duration-300 hover:bg-white/[0.035] focus-visible:bg-white/[0.035] sm:py-3",
+                          accentBorder[d.accent],
+                        )}
                         onPointerEnter={() => (storyState.focus = i)}
                         onPointerLeave={() => (storyState.focus = -1)}
                         onFocus={() => (storyState.focus = i)}
                         onBlur={() => (storyState.focus = -1)}
                       >
-                        <span className={`font-mono text-xs ${d.colour}`}>0{i + 1}</span>
-                        <span className={`text-2xl font-medium tracking-tight sm:text-3xl ${d.colour}`}>{d.name}</span>
-                        <span className="text-muted transition-colors group-hover:text-ink">{d.line}</span>
+                        <span className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                          <span className={cn("font-mono text-xs", accentText[d.accent])}>0{i + 1}</span>
+                          <span className={cn("text-xl font-medium tracking-tight sm:text-2xl", accentText[d.accent])}>
+                            {d.name}
+                          </span>
+                          <span className="text-ink/90 italic">{d.tagline}</span>
+                          <ArrowRight
+                            aria-hidden
+                            className="size-4 self-center text-faint opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
+                          />
+                        </span>
+                        <span className="mt-1 hidden max-w-xl text-sm leading-relaxed text-muted sm:block">
+                          {d.description}
+                        </span>
                       </Link>
                     </li>
                   ))}
                 </ul>
+                <div className="lg:col-span-2 lg:mt-8 lg:flex lg:items-baseline lg:gap-8">
+                  <p data-beat-line className="mt-6 max-w-xl font-medium text-ink sm:mt-8 lg:mt-0">
+                    {disciplinesSection.closingLine}
+                  </p>
+                  <Link
+                    data-beat-line
+                    href={disciplinesSection.cta.href}
+                    className="group mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-soft hover:text-ink lg:mt-0"
+                  >
+                    {disciplinesSection.cta.label}
+                    <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
               </div>
             </Container>
           </div>
         </section>
 
-        {/* 02 — the bundles braid into one rope */}
-        <section data-beat className="relative h-[120svh]">
-          <div className="sticky top-0 flex h-svh items-end pb-20 sm:items-center sm:pb-0">
-            <Container>
+        {/* 02 — How we work: the bundles braid into one rope */}
+        <section data-beat className="relative h-[130svh]">
+          <div className="sticky top-0 flex h-svh items-end pb-16 landscape:items-center landscape:pb-0">
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-obsidian via-obsidian/80 to-transparent landscape:hidden" />
+            <Container className="relative">
               <div className="max-w-xl">
                 <p data-beat-line className="eyebrow text-blue-soft">
                   {approachSection.eyebrow}
                 </p>
-                <h2 data-beat-line className="mt-5 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl">
+                <h2 data-beat-line className="mt-4 text-3xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl">
                   {approachSection.title}
                 </h2>
-                <p data-beat-line className="mt-6 max-w-md text-lg leading-relaxed text-muted">
-                  {approachSection.body}
-                </p>
-                <Link data-beat-line href="/process" className="group mt-8 inline-flex items-center gap-2 font-medium">
-                  How we work
+                {approachSection.body.map((paragraph) => (
+                  <p key={paragraph.slice(0, 24)} data-beat-line className="mt-5 leading-relaxed text-muted sm:text-lg">
+                    {paragraph}
+                  </p>
+                ))}
+                <ul data-beat-line aria-label="What every engagement includes" className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink">
+                  {approachSection.reassurance.map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <span aria-hidden className="size-1.5 rounded-full bg-blue" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  data-beat-line
+                  href={approachSection.cta.href}
+                  className="group mt-8 inline-flex items-center gap-2 font-medium text-blue-soft hover:text-ink"
+                >
+                  {approachSection.cta.label}
                   <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
@@ -213,26 +269,37 @@ export function Story() {
           </div>
         </section>
 
-        {/* 03 — the rope weaves back into A3RA */}
-        <section data-beat data-beat-last className="relative h-[120svh]">
-          <div className="sticky top-0 flex h-svh items-end pb-20 sm:items-center sm:pb-0">
-            <Container>
+        {/* 03 — Contact: the rope weaves back into A3RA */}
+        <section data-beat data-beat-last className="relative h-[130svh]">
+          <div className="sticky top-0 flex h-svh items-end pb-12 landscape:items-center landscape:pb-0">
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-obsidian via-obsidian/80 to-transparent landscape:hidden" />
+            <Container className="relative">
               <div className="max-w-xl">
-                <h2 data-beat-line className="text-5xl leading-[1.02] font-semibold tracking-tight text-balance sm:text-7xl">
+                <h2 data-beat-line className="text-3xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-6xl">
                   {closing.title}
                 </h2>
-                <p data-beat-line className="mt-6 text-lg text-muted">
-                  {closing.body}
-                </p>
-                <div data-beat-line className="mt-10 flex flex-col gap-3 sm:flex-row">
-                  <ButtonLink href="/contact" size="lg">
-                    Let&apos;s talk
-                    <ArrowUpRight aria-hidden className="size-4" />
-                  </ButtonLink>
-                  <ButtonLink href="/contact/book" size="lg" variant="secondary">
-                    Book a call
+                {closing.body.map((paragraph) => (
+                  <p key={paragraph.slice(0, 24)} data-beat-line className="mt-5 leading-relaxed text-muted sm:text-lg">
+                    {paragraph}
+                  </p>
+                ))}
+                <div data-beat-line className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <EnquiryDialog label={closing.primaryCta} source="home-dialog" />
+                  <ButtonLink href={site.bookingUrl} size="lg" variant="secondary">
+                    Book a {booking.durationMinutes}-minute call
                   </ButtonLink>
                 </div>
+                <p data-beat-line className="mt-5 text-sm text-faint italic">
+                  {closing.note}
+                </p>
+                {site.contactEmail && (
+                  <p data-beat-line className="mt-2 text-sm text-faint">
+                    Prefer email?{" "}
+                    <a href={`mailto:${site.contactEmail}`} className="text-muted underline underline-offset-4 hover:text-ink">
+                      {site.contactEmail}
+                    </a>
+                  </p>
+                )}
               </div>
             </Container>
           </div>

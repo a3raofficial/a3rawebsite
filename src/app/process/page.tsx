@@ -8,7 +8,7 @@ import { faqs, processStages } from "@/content/process";
 export const metadata: Metadata = {
   title: "How We Work",
   description:
-    "A3RA's five-stage process — discover, diagnose, build, deploy and evolve — designed to make every engagement predictable and low-risk.",
+    "A3RA's six-stage process — discover, define, design, build, launch and improve — with clear scope, defined milestones and a deliverable at every stage.",
   alternates: { canonical: "/process" },
 };
 
@@ -18,7 +18,7 @@ export default function ProcessPage() {
       <PageHeader
         eyebrow="Process"
         title="A predictable path from problem to working solution."
-        intro="Five stages, agreed one at a time. You always know what we're doing, why, and what comes next."
+        intro="Six stages, each with a defined deliverable. Scope and milestones are agreed up front, and you hear from us regularly along the way."
         threads="process"
       />
 
@@ -45,7 +45,7 @@ export default function ProcessPage() {
 
       <ClosingCta
         title="Stage one is a conversation."
-        body="Pick a time that suits you and we'll start with Discover."
+        body="Pick a time that suits you and we'll start by understanding the challenge."
         cta={{ label: "Book a discovery call", href: "/contact/book" }}
       />
     </>

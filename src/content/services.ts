@@ -1,81 +1,95 @@
+/**
+ * The three disciplines. The homepage owns each discipline's one-paragraph
+ * description (src/content/home.ts); this file owns the detail shown on
+ * /services. Only list work the founders can genuinely deliver.
+ */
 export type Service = {
-  id: string;
+  id: "strategy" | "data-ai" | "engineering";
   number: string;
   title: string;
-  /** One-line audience framing. */
-  forWho: string;
-  summary: string;
-  /** The business problem this pillar addresses. */
+  /** Short positioning line, shared with the homepage as the discipline's label. */
+  tagline: string;
+  /** Matches the discipline's thread colour: gold, white (ink) or blue. */
+  accent: "gold" | "ink" | "blue";
+  /** The business problem this discipline addresses. */
   problem: string;
+  /** Situations where clients typically bring us in. */
   useCases: string[];
-  deliverables: string[];
+  /** What an engagement can include — scoped per project, not a fixed package. */
+  offerings: string[];
 };
 
 export const services: Service[] = [
   {
     id: "strategy",
     number: "01",
-    title: "Strategy & Intelligence",
-    forWho: "For businesses asking what to build or improve.",
-    summary:
-      "We help you find where technology, data and AI can create real value — and decide what is worth building before anything gets built.",
+    title: "Strategy",
+    tagline: "Decide what is worth building.",
+    accent: "gold",
     problem:
-      "You know something needs to change, but not exactly what. Options multiply, AI is everywhere, and committing budget to the wrong solution is expensive.",
+      "You know something needs to change, but not exactly what — or which option is worth the investment. Committing budget to the wrong solution is expensive.",
     useCases: [
-      "Evaluating whether AI fits a specific workflow",
-      "Understanding where time or money is being lost",
+      "Working out where time or money is being lost",
       "Choosing between building, buying or changing a process",
       "Planning a new product or system before development",
+      "Turning a broad idea into a scoped first release",
     ],
-    deliverables: [
-      "AI strategy and opportunity assessment",
-      "Data-driven business analysis",
-      "Process and cost optimization recommendations",
-      "Technical roadmap and solution architecture",
+    offerings: [
+      "Business process analysis",
+      "Product and digital strategy",
+      "Requirements gathering",
+      "Feasibility analysis",
+      "Workflow analysis",
+      "Digital transformation roadmaps",
+      "Project planning",
+    ],
+  },
+  {
+    id: "data-ai",
+    number: "02",
+    title: "Data & AI",
+    tagline: "Turn information into better decisions.",
+    accent: "ink",
+    problem:
+      "Your data sits in spreadsheets, tools and systems, but it isn't helping you decide faster or work smarter. AI looks promising, but it's unclear where it would genuinely help.",
+    useCases: [
+      "Reports that take hours to assemble by hand",
+      "Deciding whether AI fits a specific workflow",
+      "Forecasting demand, sales or workload",
+      "Repetitive decisions that follow clear rules",
+    ],
+    offerings: [
+      "Business intelligence and analytics",
+      "Interactive dashboards",
+      "Forecasting and predictive analytics",
+      "Machine learning solutions",
+      "AI assistants and recommendation systems",
+      "Intelligent workflow automation",
+      "Data pipeline development",
     ],
   },
   {
     id: "engineering",
-    number: "02",
-    title: "Digital Products & Engineering",
-    forWho: "For businesses ready to turn ideas into working products.",
-    summary:
-      "We design and build the software that solves the problem — websites, web applications, AI-powered tools and the systems behind them.",
-    problem:
-      "You have a clear idea or a validated need, and you need a team that can take it from first version to a dependable, deployed product.",
-    useCases: [
-      "Launching an MVP to test a product idea",
-      "Building a custom website or web application",
-      "Adding AI features or agents to an existing workflow",
-      "Connecting systems through APIs and integrations",
-    ],
-    deliverables: [
-      "Custom websites and web applications",
-      "AI-powered applications and agents",
-      "Product prototypes and MVPs",
-      "API integrations, backend systems and deployment",
-    ],
-  },
-  {
-    id: "optimization",
     number: "03",
-    title: "Optimization & Partnership",
-    forWho: "For businesses looking to improve systems that already exist.",
-    summary:
-      "We find the bottlenecks in how work gets done today, then automate, streamline and keep improving what is already in place.",
+    title: "Engineering",
+    tagline: "Build solutions your business can rely on.",
+    accent: "blue",
     problem:
-      "Your systems work, but slowly. Manual steps, disconnected tools and workarounds cost time every week and make growth harder.",
+      "Your team works around tools that don't fit, or an idea needs to become dependable software that connects to the systems you already use.",
     useCases: [
-      "Automating repetitive manual workflows",
-      "Identifying and removing operational bottlenecks",
-      "Improving an existing application or internal tool",
-      "Ongoing technical support after launch",
+      "Launching an MVP or an internal tool",
+      "Replacing spreadsheets with a purpose-built application",
+      "Connecting a CRM, payments or other business systems",
+      "Keeping an existing application running and improving",
     ],
-    deliverables: [
-      "Workflow automation",
-      "Operational bottleneck analysis",
-      "System and process optimization",
-      "Ongoing technical support and product evolution",
+    offerings: [
+      "Custom web applications",
+      "Internal business tools",
+      "API and software integrations",
+      "CRM and business system integrations",
+      "Backend development",
+      "Database and application development",
+      "Deployment and maintenance",
     ],
   },
 ];

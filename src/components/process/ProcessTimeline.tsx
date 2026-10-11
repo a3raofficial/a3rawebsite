@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ProcessStage } from "@/content/process";
 
 /**
- * The five stages with a line that fills as you scroll, lighting each stage
+ * The six stages with a line that fills as you scroll, lighting each stage
  * as you reach it. Without JS (or with reduced motion) the line is simply full.
  */
 export function ProcessTimeline({ stages }: { stages: ProcessStage[] }) {
@@ -71,16 +71,9 @@ export function ProcessTimeline({ stages }: { stages: ProcessStage[] }) {
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{stage.title}</h2>
               <p className="mt-4 text-lg leading-relaxed text-muted">{stage.description}</p>
             </div>
-            <div className="spotlight rounded-2xl border border-line bg-surface p-6">
-              <h3 className="eyebrow">What to expect</h3>
-              <ul className="mt-4 space-y-3 text-muted">
-                {stage.expect.map((item) => (
-                  <li key={item} className="flex gap-3">
-                    <span aria-hidden className="mt-2.5 size-1 shrink-0 rounded-full bg-blue" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+            <div className="spotlight self-start rounded-2xl border border-line bg-surface p-6">
+              <h3 className="eyebrow text-blue-soft">Deliverable</h3>
+              <p className="mt-3 text-lg leading-relaxed text-ink">{stage.deliverable}</p>
             </div>
           </div>
         </li>

@@ -8,12 +8,12 @@ const ist = (iso: string) => new Date(`${iso}+05:30`);
 describe("generateSlots", () => {
   const slots = generateSlots(now);
 
-  it("only offers times between 10:00 and 18:30 IST on Mon–Sat", () => {
+  it("only offers times between 10:00 and 18:40 IST on Mon–Sat", () => {
     for (const slot of slots) {
       const local = new Date(slot.getTime() + 330 * 60_000);
       const minutes = local.getUTCHours() * 60 + local.getUTCMinutes();
       expect(minutes).toBeGreaterThanOrEqual(600);
-      expect(minutes).toBeLessThanOrEqual(18 * 60 + 30);
+      expect(minutes).toBeLessThanOrEqual(18 * 60 + 40);
       expect(local.getUTCDay()).not.toBe(0);
     }
   });
@@ -29,15 +29,15 @@ describe("generateSlots", () => {
     expect(slots.some((s) => s.getTime() === ist("2026-10-12T10:00:00").getTime())).toBe(true);
   });
 
-  it("creates 18 half-hour slots per working day", () => {
+  it("creates 27 twenty-minute slots per working day", () => {
     const saturday = slots.filter((s) => s.toISOString().startsWith("2026-10-10"));
-    expect(saturday).toHaveLength(18);
+    expect(saturday).toHaveLength(27);
   });
 });
 
 describe("isBookableSlot", () => {
   it("accepts a generated slot and rejects off-grid, past or Sunday times", () => {
-    expect(isBookableSlot(ist("2026-10-12T11:30:00"), now)).toBe(true);
+    expect(isBookableSlot(ist("2026-10-12T11:20:00"), now)).toBe(true);
     expect(isBookableSlot(ist("2026-10-12T11:15:00"), now)).toBe(false);
     expect(isBookableSlot(ist("2026-10-09T15:00:00"), now)).toBe(false); // within notice period
     expect(isBookableSlot(ist("2026-10-11T11:00:00"), now)).toBe(false); // Sunday

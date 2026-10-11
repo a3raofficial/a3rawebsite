@@ -17,7 +17,7 @@ const sections = [
   {
     title: "What we collect",
     body: [
-      "When you submit the enquiry form, we collect the details you enter: your name, email address, optional company or website, the area you're interested in, your description of the problem, and optional budget and timeline ranges. We also record that you agreed to this notice and the time of your submission.",
+      "When you submit the enquiry form, we collect the details you enter: your name, email address, optional company or website, what you'd like to improve, an optional description of the challenge, and an optional timeline. We also record that you agreed to this notice and the time of your submission.",
       "When you request a discovery call, we collect your name, email address, optional company or website, what you'd like to discuss, and the time you chose.",
       "To prevent spam and abuse, we store a one-way, salted hash of your IP address. We cannot read your IP address from it.",
     ],

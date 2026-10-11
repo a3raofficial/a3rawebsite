@@ -55,7 +55,7 @@ export function Navbar() {
       <Container className="flex h-16 items-center justify-between gap-6 sm:h-20">
         <Logo onNavigate={close} />
 
-        <nav aria-label="Main" className="hidden md:block">
+        <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-8">
             {navLinks.map((link) => {
               const active = isActive(pathname, link.href);
@@ -78,13 +78,13 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ButtonLink href={primaryCta.href} onNavigate={close} className={cn("hidden sm:inline-flex", open && "sm:hidden md:inline-flex")}>
+          <ButtonLink href={primaryCta.href} onNavigate={close} className={cn("hidden sm:inline-flex", open && "sm:hidden lg:inline-flex")}>
             {primaryCta.label}
             <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </ButtonLink>
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-lg border border-line-strong text-ink md:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-lg border border-line-strong text-ink lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -99,7 +99,7 @@ export function Navbar() {
         <nav
           id="mobile-menu"
           aria-label="Mobile"
-          className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-obsidian md:hidden"
+          className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-obsidian lg:hidden"
         >
           <Container className="flex h-full flex-col py-8">
             <ul className="flex flex-col">

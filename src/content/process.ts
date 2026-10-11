@@ -1,73 +1,57 @@
 export type ProcessStage = {
   number: string;
-  /** Short label used on the homepage overview. */
-  short: string;
   title: string;
   description: string;
-  /** What the client can expect during this stage (Process page). */
-  expect: string[];
+  /** What the client receives at the end of the stage. */
+  deliverable: string;
 };
 
+/**
+ * The six stages of an engagement. Support (stage 06) is agreed per project —
+ * it is offered, not automatically included.
+ */
 export const processStages: ProcessStage[] = [
   {
     number: "01",
-    short: "Discover",
-    title: "Discover",
+    title: "Discover the challenge",
     description:
-      "Understand the business, the problem, current workflows, constraints and desired outcomes.",
-    expect: [
-      "An introductory conversation with the founders",
-      "Questions about how things work today, not just what you want built",
-      "No obligation to continue",
-    ],
+      "Understand the business, users, existing workflows, and bottlenecks. Agree on what needs to improve and how success will be assessed.",
+    deliverable: "Problem statement and success criteria.",
   },
   {
     number: "02",
-    short: "Strategize",
-    title: "Diagnose & strategize",
+    title: "Define the solution",
     description:
-      "Identify root causes, evaluate options, prioritize opportunities and agree on a practical direction.",
-    expect: [
-      "A clear view of the underlying problem",
-      "Options compared on value, cost and effort",
-      "An agreed scope before any build work starts",
-    ],
+      "Compare possible approaches, identify constraints, and establish a realistic scope, priorities, milestones, and estimates.",
+    deliverable: "Proposed solution and project roadmap.",
   },
   {
     number: "03",
-    short: "Build",
-    title: "Design & build",
+    title: "Design and validate",
     description:
-      "Design the user experience and develop the appropriate software, AI system or optimized workflow.",
-    expect: [
-      "Regular check-ins and working previews",
-      "Decisions explained in plain language",
-      "Scope changes discussed before they happen",
-    ],
+      "Map out user journeys, workflows, and interfaces. Test important assumptions before committing to the full build.",
+    deliverable: "Validated concept, prototype, or solution design.",
   },
   {
     number: "04",
-    short: "Deploy",
-    title: "Deploy & validate",
+    title: "Build and integrate",
     description:
-      "Test the solution, deploy it, and validate it against the agreed requirements.",
-    expect: [
-      "Testing against the requirements we agreed",
-      "A managed release into your environment",
-      "Handover of access, documentation and ownership",
-    ],
+      "Develop the agreed solution, connect relevant systems and data sources, and review progress against the defined scope.",
+    deliverable: "Working software, analytics, or automation.",
   },
   {
     number: "05",
-    short: "Evolve",
-    title: "Evolve",
+    title: "Test and launch",
     description:
-      "Provide agreed support, monitor outcomes and identify further improvements.",
-    expect: [
-      "Support on terms agreed up front",
-      "A look at what is working and what is not",
-      "Recommendations for the next improvement, if any",
-    ],
+      "Validate functionality, address issues, deploy the solution, and help relevant users adopt it.",
+    deliverable: "Tested release and agreed handover documentation.",
+  },
+  {
+    number: "06",
+    title: "Support and improve",
+    description:
+      "Review performance, gather feedback, resolve issues, and identify opportunities for further improvement.",
+    deliverable: "Ongoing support or an agreed improvement plan.",
   },
 ];
 

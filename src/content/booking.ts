@@ -3,7 +3,7 @@
  * the slot picker and the server both read from here.
  */
 export const booking = {
-  durationMinutes: 30,
+  durationMinutes: 20,
   /** IANA zone used for display, and its fixed UTC offset (India has no DST). */
   timeZone: "Asia/Kolkata",
   timeZoneLabel: "IST",

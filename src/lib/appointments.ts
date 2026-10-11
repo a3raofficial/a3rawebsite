@@ -20,6 +20,8 @@ type CallEmail = { name: string; email: string; company?: string; topic: string;
 
 export type AppointmentDeps = {
   countRecentByIp(ipHash: string, since: Date): Promise<number>;
+  /** Active bookings whose time range overlaps [start, end). */
+  countOverlapping(start: Date, end: Date): Promise<number>;
   /** Throws an error with `code: 11000` if the slot is already actively booked. */
   insertAppointment(appointment: Appointment): Promise<string>;
   updateNotifications(id: string, notifications: Appointment["notifications"]): Promise<void>;
@@ -41,9 +43,20 @@ const SAVE_FAILED = "We couldn't save your request right now. Please try again s
 const SLOT_TAKEN = "Sorry — that time was just taken. Please pick another.";
 
 /** Bookable slots minus the ones already actively booked. */
-export function availableSlots(now: Date, taken: Date[]): Date[] {
-  const takenSet = new Set(taken.map((d) => d.getTime()));
-  return generateSlots(now).filter((slot) => !takenSet.has(slot.getTime()));
+export type BookedRange = { start: Date; end: Date };
+
+/**
+ * Bookable slots minus any that overlap an active booking. Overlap (not just
+ * an identical start time) matters when the call length changes and older
+ * bookings sit on a different time grid.
+ */
+export function availableSlots(now: Date, taken: BookedRange[]): Date[] {
+  const length = booking.durationMinutes * 60_000;
+  return generateSlots(now).filter((slot) => {
+    const start = slot.getTime();
+    const end = start + length;
+    return !taken.some((t) => start < t.end.getTime() && t.start.getTime() < end);
+  });
 }
 
 export async function submitAppointment(
@@ -92,12 +105,22 @@ export async function submitAppointment(
     return { status: 503, body: { ok: false, error: SAVE_FAILED } };
   }
 
+  const slotEnd = new Date(start.getTime() + booking.durationMinutes * 60_000);
+  try {
+    if ((await deps.countOverlapping(start, slotEnd)) > 0) {
+      return { status: 409, body: { ok: false, error: SLOT_TAKEN, fieldErrors: { slotStart: SLOT_TAKEN } } };
+    }
+  } catch (error) {
+    deps.log("appointment overlap check failed", { error: (error as Error).name });
+    return { status: 503, body: { ok: false, error: SAVE_FAILED } };
+  }
+
   const appointment: Appointment = {
     ...request,
     email: request.email.toLowerCase(),
     createdAt: now,
     slotStart: start,
-    slotEnd: new Date(start.getTime() + booking.durationMinutes * 60_000),
+    slotEnd,
     timeZone: booking.timeZone,
     status: "requested",
     source: source ?? null,

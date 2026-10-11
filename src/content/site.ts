@@ -17,11 +17,12 @@ export const site = {
   responseTime: "within two working days",
 } as const;
 
-export const primaryCta = { label: "Let's Talk", href: "/contact" } as const;
+export const primaryCta = { label: "Discuss a project", href: "/contact" } as const;
 
 export const navLinks = [
   { label: "Services", href: "/services" },
-  { label: "Work", href: "/projects" },
-  { label: "Process", href: "/process" },
+  { label: "How We Work", href: "/process" },
+  { label: "Case Studies", href: "/projects" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ] as const;

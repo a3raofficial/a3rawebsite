@@ -241,3 +241,14 @@ body {
     animation: energy-spin 2.4s linear infinite;
   }
 }
+
+/* Enquiry dialog (components/forms/EnquiryDialog.tsx). */
+.enquiry-dialog::backdrop {
+  background: rgb(5 6 10 / 0.72);
+  backdrop-filter: blur(6px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .enquiry-dialog[open] {
+    animation: fade-in 0.35s var(--ease-out-soft) both;
+  }
+}

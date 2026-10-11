@@ -20,7 +20,11 @@ Goal: convert visitors into project enquiries and discovery calls.
   tried and rejected as messy — don't reintroduce them. Thread quads need `side: DoubleSide` (they share one
   winding). Per-frame uniforms are module-level (React lint forbids mutating hook values). No bloom pass.
 - Never repeat content across pages: one page owns each idea, others link. `ClosingCta` needs unique title/body.
-- Planned: launch SEO. Domain a3ra.in pending.
+- Live at https://www.a3ra.in (Netlify, GoDaddy DNS). Pushes to `main` deploy automatically.
+- Homepage sections: 01 What we bring (3 disciplines, hover lights the matching thread bundle), 02 How we work,
+  contact (EnquiryDialog modal + 20-minute booking link). Disciplines' one-line descriptions live in `content/home.ts`;
+  the detailed lists live in `content/services.ts` (/services#strategy|data-ai|engineering).
+- No client names or case studies until the client approves publication (a current client must not be named yet).
 
 ## Layout
 - `src/app/*` — routes (`/`, `/services`, `/projects`, `/about`, `/process`, `/contact`, `/contact/book`, `/privacy`)

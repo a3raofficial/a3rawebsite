@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent, type ReactNode } from "react";
-import { CircleAlert, CircleCheck } from "lucide-react";
+import { useId, useState, type FormEvent, type ReactNode } from "react";
+import { ArrowRight, CircleAlert, CircleCheck } from "lucide-react";
 import { Button, buttonClasses } from "@/components/ui/Button";
+import { booking } from "@/content/booking";
 import { site } from "@/content/site";
-import { budgetRanges, enquirySchema, serviceInterests, timelines } from "@/lib/validation";
+import { enquirySchema, serviceInterests, timelines } from "@/lib/validation";
 import { cn } from "@/lib/cn";
 
 type FieldErrors = Partial<Record<string, string>>;
@@ -46,16 +47,19 @@ type Status = "idle" | "submitting" | "success" | "error";
 
 /**
  * Project enquiry form. Validates in the browser with the shared Zod schema,
- * then posts to /api/leads, which validates again and stores the enquiry.
+ * then posts to /api/leads, which validates again, stores the enquiry and
+ * emails both sides. Success is only shown once the server has saved it.
  */
-export function ProjectEnquiryForm() {
+export function ProjectEnquiryForm({ source = "contact-page" }: { source?: string }) {
+  const uid = useId();
+  const id = (name: string) => `${uid}-${name}`;
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [serverError, setServerError] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status === "submitting") return;
+    if (status === "submitting") return; // no duplicate submissions while one is in flight
     const form = event.currentTarget;
     const data = new FormData(form);
     const raw = {
@@ -63,8 +67,7 @@ export function ProjectEnquiryForm() {
       email: data.get("email"),
       company: data.get("company") || undefined,
       serviceInterest: data.get("serviceInterest") || undefined,
-      problemDescription: data.get("problemDescription"),
-      budgetRange: data.get("budgetRange") || undefined,
+      problemDescription: data.get("problemDescription") || undefined,
       timeline: data.get("timeline") || undefined,
       privacyConsent: data.get("privacyConsent") === "on",
     };
@@ -87,7 +90,7 @@ export function ProjectEnquiryForm() {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...raw, website: data.get("website") || undefined, source: "contact-page" }),
+        body: JSON.stringify({ ...raw, website: data.get("website") || undefined, source }),
       });
       const body = (await response.json().catch(() => ({}))) as {
         ok?: boolean;
@@ -100,10 +103,10 @@ export function ProjectEnquiryForm() {
         return;
       }
       if (body.fieldErrors) showErrors(form, body.fieldErrors);
-      setServerError(body.error ?? "Something went wrong. Please try again.");
+      setServerError(body.error ?? "Something went wrong and your enquiry was not sent. Please try again.");
       setStatus("error");
     } catch {
-      setServerError("We couldn't reach the server. Please check your connection and try again.");
+      setServerError("We couldn't reach the server, so your enquiry was not sent. Please check your connection and try again.");
       setStatus("error");
     }
   }
@@ -119,12 +122,12 @@ export function ProjectEnquiryForm() {
     return (
       <div role="status" className="rounded-2xl border border-blue/40 bg-blue/5 p-6 sm:p-8">
         <CircleCheck aria-hidden className="size-8 text-blue" />
-        <h3 className="mt-5 text-2xl font-semibold tracking-tight">Thanks — we&apos;ve received your enquiry.</h3>
-        <p className="mt-3 leading-relaxed text-muted">
-          One of the founders will reply {site.responseTime}. We&apos;ve also sent a confirmation to your email.
+        <p className="mt-5 text-lg leading-relaxed text-ink">
+          Thanks for reaching out. Your enquiry has been received. We&apos;ll review the details and follow up using the
+          contact information you provided.
         </p>
-        <Link href={site.bookingUrl} className={buttonClasses("primary", "md", "mt-6")}>
-          Book a discovery call
+        <Link href={site.bookingUrl} className={buttonClasses("secondary", "md", "mt-6")}>
+          Book a {booking.durationMinutes}-minute call
         </Link>
         <button
           type="button"
@@ -137,7 +140,7 @@ export function ProjectEnquiryForm() {
     );
   }
 
-  const describedBy = (name: string) => (errors[name] ? `${name}-error` : undefined);
+  const describedBy = (name: string) => (errors[name] ? `${id(name)}-error` : undefined);
 
   return (
     <form noValidate onSubmit={handleSubmit} className="space-y-6" aria-label="Project enquiry">
@@ -149,9 +152,9 @@ export function ProjectEnquiryForm() {
         </label>
       </div>
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field id="name" label="Name" error={errors.name}>
+        <Field id={id("name")} label="Name" error={errors.name}>
           <input
-            id="name"
+            id={id("name")}
             name="name"
             autoComplete="name"
             required
@@ -160,9 +163,9 @@ export function ProjectEnquiryForm() {
             className={fieldClass}
           />
         </Field>
-        <Field id="email" label="Work email" error={errors.email}>
+        <Field id={id("email")} label="Work email" error={errors.email}>
           <input
-            id="email"
+            id={id("email")}
             name="email"
             type="email"
             autoComplete="email"
@@ -174,13 +177,13 @@ export function ProjectEnquiryForm() {
         </Field>
       </div>
 
-      <Field id="company" label="Company or website" optional error={errors.company}>
-        <input id="company" name="company" autoComplete="organization" className={fieldClass} />
+      <Field id={id("company")} label="Company name" optional error={errors.company}>
+        <input id={id("company")} name="company" autoComplete="organization" className={fieldClass} />
       </Field>
 
-      <Field id="serviceInterest" label="What can we help with?" error={errors.serviceInterest}>
+      <Field id={id("serviceInterest")} label="What would you like to improve?" error={errors.serviceInterest}>
         <select
-          id="serviceInterest"
+          id={id("serviceInterest")}
           name="serviceInterest"
           required
           defaultValue=""
@@ -197,37 +200,31 @@ export function ProjectEnquiryForm() {
         </select>
       </Field>
 
-      <Field id="problemDescription" label="What are you trying to solve?" error={errors.problemDescription}>
+      <Field
+        id={id("problemDescription")}
+        label="Tell us a little about the challenge"
+        optional
+        error={errors.problemDescription}
+      >
         <textarea
-          id="problemDescription"
+          id={id("problemDescription")}
           name="problemDescription"
-          rows={5}
-          required
-          placeholder="A few sentences is plenty. You don't need a detailed specification."
+          rows={4}
+          placeholder="A few sentences is plenty. You don't need a technical specification."
           aria-invalid={!!errors.problemDescription}
           aria-describedby={describedBy("problemDescription")}
           className={cn(fieldClass, "resize-y")}
         />
       </Field>
 
-      <div className="grid gap-6 sm:grid-cols-2">
-        <Field id="budgetRange" label="Approximate budget" optional>
-          <select id="budgetRange" name="budgetRange" defaultValue="" className={fieldClass}>
-            <option value="">Prefer not to say</option>
-            {budgetRanges.map((option) => (
-              <option key={option}>{option}</option>
-            ))}
-          </select>
-        </Field>
-        <Field id="timeline" label="Expected timeline" optional>
-          <select id="timeline" name="timeline" defaultValue="" className={fieldClass}>
-            <option value="">Prefer not to say</option>
-            {timelines.map((option) => (
-              <option key={option}>{option}</option>
-            ))}
-          </select>
-        </Field>
-      </div>
+      <Field id={id("timeline")} label="Expected timeline" optional>
+        <select id={id("timeline")} name="timeline" defaultValue="" className={fieldClass}>
+          <option value="">Prefer not to say</option>
+          {timelines.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
+        </select>
+      </Field>
 
       <div>
         <label className="flex items-start gap-3 text-sm text-muted">
@@ -247,14 +244,21 @@ export function ProjectEnquiryForm() {
           </span>
         </label>
         {errors.privacyConsent && (
-          <p id="privacyConsent-error" className="mt-2 text-sm text-red-300">
+          <p id={`${id("privacyConsent")}-error`} className="mt-2 text-sm text-red-300">
             {errors.privacyConsent}
           </p>
         )}
       </div>
 
-      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={status === "submitting"}>
-        {status === "submitting" ? "Sending…" : "Send enquiry"}
+      <Button
+        type="submit"
+        size="lg"
+        className="w-full sm:w-auto"
+        disabled={status === "submitting"}
+        aria-busy={status === "submitting"}
+      >
+        {status === "submitting" ? "Sending…" : "Send project enquiry"}
+        {status !== "submitting" && <ArrowRight aria-hidden className="size-4" />}
       </Button>
 
       <div aria-live="polite">

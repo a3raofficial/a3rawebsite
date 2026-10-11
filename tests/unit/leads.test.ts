@@ -7,10 +7,9 @@ const validInput = {
   name: "Test Person",
   email: "Test@Example.com",
   company: "Example Ltd",
-  serviceInterest: "Not sure yet",
+  serviceInterest: "Not sure yet — need help defining the problem",
   problemDescription: "We spend hours each week copying orders between two systems.",
-  budgetRange: "Not sure yet",
-  timeline: "Just exploring",
+  timeline: "Just exploring options",
   privacyConsent: true,
 };
 
@@ -57,7 +56,7 @@ describe("submitEnquiry", () => {
   it("rejects invalid input with field errors and saves nothing", async () => {
     const { deps } = makeDeps();
     const result = await submitEnquiry(
-      { ...validInput, email: "not-an-email", problemDescription: "short", privacyConsent: false },
+      { ...validInput, email: "not-an-email", serviceInterest: "Something else", privacyConsent: false },
       "hash",
       deps,
     );
@@ -65,7 +64,7 @@ describe("submitEnquiry", () => {
     expect(result.status).toBe(400);
     if (result.status !== 400) throw new Error("unreachable");
     expect(Object.keys(result.body.fieldErrors ?? {})).toEqual(
-      expect.arrayContaining(["email", "problemDescription", "privacyConsent"]),
+      expect.arrayContaining(["email", "serviceInterest", "privacyConsent"]),
     );
     expect(deps.insertLead).not.toHaveBeenCalled();
   });
@@ -158,5 +157,27 @@ describe("hashIp", () => {
     expect(a).toBe(hashIp("203.0.113.7", "salt"));
     expect(a).not.toContain("203.0.113.7");
     expect(a).not.toBe(hashIp("203.0.113.7", "other-salt"));
+  });
+});
+
+describe("enquiry without a description", () => {
+  it("is accepted — visitors don't need to describe the problem yet", async () => {
+    const deps = {
+      countRecentByIp: vi.fn(async () => 0),
+      insertLead: vi.fn(async (lead: Lead) => (lead ? "lead-1" : "")),
+      updateNotifications: vi.fn(async () => {}),
+      sendTeamNotification: vi.fn(async () => ({ state: "sent" as const })),
+      sendClientConfirmation: vi.fn(async () => ({ state: "sent" as const })),
+      defer: () => {},
+      now: () => new Date("2026-10-09T10:00:00Z"),
+      log: vi.fn(),
+    };
+    const result = await submitEnquiry(
+      { name: "Test Person", email: "t@example.com", serviceInterest: "Improve an existing product", privacyConsent: true },
+      "hash",
+      deps,
+    );
+    expect(result.status).toBe(201);
+    expect(deps.insertLead.mock.calls[0][0].problemDescription).toBeUndefined();
   });
 });

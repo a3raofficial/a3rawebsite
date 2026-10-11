@@ -12,7 +12,10 @@ export async function GET() {
   try {
     const appointments = await getAppointmentsCollection();
     const taken = await appointments
-      .find({ slotStart: { $gte: now }, status: { $in: ACTIVE_APPOINTMENT_STATUSES } }, { projection: { slotStart: 1 } })
+      .find(
+        { slotEnd: { $gt: now }, status: { $in: ACTIVE_APPOINTMENT_STATUSES } },
+        { projection: { slotStart: 1, slotEnd: 1 } },
+      )
       .toArray();
     return json({
       ok: true,
@@ -21,7 +24,7 @@ export async function GET() {
       durationMinutes: booking.durationMinutes,
       slots: availableSlots(
         now,
-        taken.map((a) => a.slotStart),
+        taken.map((a) => ({ start: a.slotStart, end: a.slotEnd })),
       ).map((d) => d.toISOString()),
     });
   } catch (error) {

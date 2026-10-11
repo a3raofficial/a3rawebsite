@@ -254,7 +254,8 @@ export type ThreadFrame = { weights: Weights; layout: Layout };
 // Homepage: hero, disciplines, approach, closing. Desktop text sits left, so threads sit right / below.
 const DESKTOP: Layout[] = [
   { x: 2.45, y: 0.15, scale: 0.6, rx: 0, ry: -0.18 },
-  { x: 2.7, y: -2.1, scale: 0.6, rx: 0.05, ry: -0.2 },
+  // Section 01 has the most copy: bundles run along the bottom, under the discipline list.
+  { x: 0.8, y: -2.85, scale: 0.52, rx: 0.05, ry: -0.2 },
   { x: 2.0, y: -1.5, scale: 0.66, rx: 0.15, ry: -0.35 },
   { x: 2.45, y: 0.15, scale: 0.6, rx: 0, ry: -0.18 },
 ];
@@ -263,7 +264,7 @@ const PORTRAIT: Layout[] = [
   { x: 0, y: 1.9, scale: 0.42, rx: 0, ry: 0 },
   { x: 0, y: 2.0, scale: 0.36, rx: 0, ry: -0.2 },
   { x: 0, y: 2.0, scale: 0.38, rx: 0.15, ry: -0.35 },
-  { x: 0, y: 1.9, scale: 0.42, rx: 0, ry: 0 },
+  { x: 0, y: 2.55, scale: 0.36, rx: 0, ry: 0 },
 ];
 const SECTION_WEIGHTS: Weights[] = [
   { tangle: 0, bundles: 0, word: 1, braid: 0 }, // hero after the intro (overridden by the intro itself)

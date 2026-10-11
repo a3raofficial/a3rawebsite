@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { ClosingCta } from "@/components/ui/ClosingCta";
+import { Reveal } from "@/components/ui/Reveal";
 import { PageHeader, Section, SectionHeading } from "@/components/ui/Section";
 import { caseStudyStructure, projects } from "@/content/projects";
 
 export const metadata: Metadata = {
-  title: "Selected Projects & Case Studies",
+  title: "Case Studies",
   description:
-    "How A3RA documents its work: real projects, approved by clients, with the problem, approach and outcome described honestly.",
+    "How A3RA documents its work: the business challenge, how we approached it, what we built, and what changed — with client details shared only when approved.",
   alternates: { canonical: "/projects" },
 };
 
@@ -14,7 +15,7 @@ export default function ProjectsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Work"
+        eyebrow="Case studies"
         title="Real work, described honestly."
         intro="We only publish projects that are real and approved for public display, and we're clear about whether something is client work, in progress, or independent."
         threads="projects"
@@ -36,23 +37,34 @@ export default function ProjectsPage() {
       )}
 
       <Section>
-        <SectionHeading
-          eyebrow="How we document work"
-          title="Every case study answers the same questions."
-          intro="So you can see not just what was built, but why — and what actually changed."
-        />
-        <ol className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        <SectionHeading eyebrow="How we document our work" title="Real problems. Clear decisions. Measurable outcomes." />
+        <div className="mt-6 max-w-3xl space-y-3 text-lg leading-relaxed text-muted">
+          <p>Every case study explains the challenge, how we approached it, what we built, and what changed as a result.</p>
+          <p>Explore the thinking behind the solution—not just the final deliverable.</p>
+        </div>
+
+        {/* A framework, not a portfolio: one numbered sequence in a single frame. */}
+        <ol
+          aria-label="The six parts of every case study"
+          className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3"
+        >
           {caseStudyStructure.map((step, i) => (
-            <li key={step.title} className="spotlight bg-obsidian p-7">
-              <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="mt-6 text-lg font-semibold">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{step.description}</p>
+            <li key={step.title} className="bg-obsidian">
+              <Reveal delay={(i % 3) * 90} className="spotlight h-full p-7 transition-colors hover:bg-white/[0.02] sm:p-8">
+                <span className="font-mono text-xs text-blue">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="mt-5 text-lg font-semibold tracking-tight">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{step.description}</p>
+              </Reveal>
             </li>
           ))}
         </ol>
       </Section>
 
-      <ClosingCta title="Working on something similar?" body="Tell us about it, even if it's still an early idea." />
+      <ClosingCta
+        title="Have a similar challenge?"
+        body="Tell us about it, even if it's still an early idea."
+        cta={{ label: "Let's discuss your project", href: "/contact" }}
+      />
     </>
   );
 }

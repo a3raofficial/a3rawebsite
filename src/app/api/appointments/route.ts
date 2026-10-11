@@ -4,11 +4,20 @@ import { submitAppointment, type AppointmentDeps } from "@/lib/appointments";
 import { sendAppointmentClientConfirmation, sendAppointmentTeamNotification } from "@/lib/server/email";
 import { clientIp, hashIp, json, readJsonBody } from "@/lib/server/http";
 import { getAppointmentsCollection } from "@/lib/server/mongodb";
+import { ACTIVE_APPOINTMENT_STATUSES } from "@/types/appointment";
 
 const deps: AppointmentDeps = {
   async countRecentByIp(ipHash, since) {
     const appointments = await getAppointmentsCollection();
     return appointments.countDocuments({ ipHash, createdAt: { $gte: since } });
+  },
+  async countOverlapping(start, end) {
+    const appointments = await getAppointmentsCollection();
+    return appointments.countDocuments({
+      status: { $in: ACTIVE_APPOINTMENT_STATUSES },
+      slotStart: { $lt: end },
+      slotEnd: { $gt: start },
+    });
   },
   async insertAppointment(appointment) {
     const appointments = await getAppointmentsCollection();
